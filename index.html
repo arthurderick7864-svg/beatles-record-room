@@ -19,8 +19,8 @@ header{text-align:center;padding:25px 12px 12px}header h1{font-weight:400;letter
 .deck{background:linear-gradient(145deg,#d3c6a9,#8f8065);color:#211e19;border:8px solid #34271d;border-radius:5px;padding:15px;box-shadow:inset 0 0 0 2px #f2e7cd}
 .deck h2{font-weight:400;text-align:center;letter-spacing:3px;font-size:17px;margin:0 0 12px}
 .turntable{height:290px;background:linear-gradient(145deg,#282725,#0e0e0d);border:5px solid #6d5b42;border-radius:4px;position:relative;display:grid;place-items:center;overflow:hidden}
-.platter{width:240px;height:240px;border-radius:50%;position:relative;background:radial-gradient(circle at 34% 27%,#ffffff18 0 1%,transparent 34%),repeating-radial-gradient(circle at center,#101010 0 1px,#252525 1.5px 2px,#111 2.5px 3.5px,#202020 4px 4.5px),radial-gradient(circle,#303030,#090909 72%);border:5px solid #454545;display:grid;place-items:center;box-shadow:0 0 0 2px #171717,0 0 18px #000,inset 0 0 16px #000}.platter:before{content:"";position:absolute;inset:8px;border-radius:50%;border:1px solid #ffffff12;box-shadow:0 0 0 2px #0008,0 0 0 4px #ffffff08,0 0 0 8px #0005;pointer-events:none}.platter:after{content:"";position:absolute;inset:0;border-radius:50%;background:conic-gradient(from 20deg,transparent 0 12%,#ffffff0a 15%,transparent 20% 48%,#ffffff0b 52%,transparent 58% 100%);pointer-events:none}.platter.spinning{animation:spin 2s linear infinite}@keyframes spin{to{transform:rotate(360deg)}}
-.platter.spinning{animation:spin 2s linear infinite}@keyframes spin{to{transform:rotate(360deg)}}
+.platter{width:240px;height:240px;border-radius:50%;position:relative;background:radial-gradient(circle at 34% 27%,#ffffff18 0 1%,transparent 34%),repeating-radial-gradient(circle at center,#101010 0 1px,#252525 1.5px 2px,#111 2.5px 3.5px,#202020 4px 4.5px),radial-gradient(circle,#303030,#090909 72%);border:5px solid #454545;display:grid;place-items:center;box-shadow:0 0 0 2px #171717,0 0 18px #000,inset 0 0 16px #000}.platter:before{content:"";position:absolute;inset:8px;border-radius:50%;border:1px solid #ffffff12;box-shadow:0 0 0 2px #0008,0 0 0 4px #ffffff08,0 0 0 8px #0005;pointer-events:none}.platter:after{content:"";position:absolute;inset:0;border-radius:50%;background:conic-gradient(from 20deg,transparent 0 12%,#ffffff0a 15%,transparent 20% 48%,#ffffff0b 52%,transparent 58% 100%);pointer-events:none}.platter.spinning{animation:spin 2s linear infinite}.platter.spinning.paused{animation-play-state:paused!important}@keyframes spin{to{transform:rotate(360deg)}}
+.platter.spinning{animation:spin 2s linear infinite}.platter.spinning.paused{animation-play-state:paused!important}@keyframes spin{to{transform:rotate(360deg)}}
 .label{width:82px;height:82px;border-radius:50%;position:relative;z-index:1;background:radial-gradient(circle,#b9a66f 0 2px,#b9a66f 2.5px,#a64d3b 3px 100%);border:2px solid #d9c58f;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;color:#f5e9c9;text-align:center;font: bold 8px Arial;letter-spacing:1px;box-shadow:0 1px 5px #000,inset 0 0 0 2px #ffffff22}.label.apple{background:radial-gradient(circle,#d8c78e 0 2px,#d8c78e 2.5px,#557a43 3px 100%);color:#f4edcf;border-color:#d9d0a4}.label .label-brand{font-size:7px;letter-spacing:1.3px;border-bottom:1px solid #f5e9c966;padding-bottom:3px;width:75%;}.label .label-band{font: bold 10px Georgia;letter-spacing:0}.label .label-side{font-size:6px;letter-spacing:1px}
 .spindle{position:absolute;width:7px;height:7px;background:#ddd;border-radius:50%}
 .arm{position:absolute;width:205px;height:13px;right:0px;top:85px;transform-origin:188px 6px;transform:rotate(-54deg);transition:transform .25s linear;z-index:2;border-radius:7px 3px 3px 7px;background:linear-gradient(180deg,#f0ecdf 0%,#bcb6a8 28%,#69645a 72%,#d8d1c1 100%);clip-path:polygon(0 58%,68% 58%,82% 0,100% 0,100% 55%,87% 55%,75% 100%,0 100%);filter:drop-shadow(0 2px 2px #0009)}
@@ -176,8 +176,8 @@ function renderTracks(){
 function stopReverse(){
  if(reverseSource){try{reverseSource.stop()}catch(e){}reverseSource.disconnect();reverseSource=null}
 }
-function pausePlatter(){ $("platter").style.animationPlayState="paused"; }
-function resetPlatter(){ const p=$("platter");p.classList.remove("spinning");p.style.animationPlayState="running";p.style.transform="rotate(0deg)"; }
+function pausePlatter(){ $("platter").classList.add("paused"); }
+function resetPlatter(){ const p=$("platter");p.classList.remove("spinning","paused");p.style.animationPlayState="";p.style.transform="rotate(0deg)"; }
 function stopPlayback(){
  $("audio").pause();stopReverse();pausePlatter();updateTonearm(0);
 }
@@ -248,7 +248,7 @@ function updateTonearm(progress=0){
  const easedPosition=0.7*position+0.3*position*position;
  arm.style.transform="rotate("+(-54+easedPosition*24)+"deg)";
 }
-function startSpin(){const p=$("platter");p.classList.add("spinning");p.style.animationPlayState="running";updateTonearm($("audio").duration?$("audio").currentTime/$("audio").duration:0)}
+function startSpin(){const p=$("platter");p.classList.add("spinning");p.classList.remove("paused");updateTonearm($("audio").duration?$("audio").currentTime/$("audio").duration:0)}
 function stopAudio(){stopPlayback()}
 $("audio").ontimeupdate=()=>{if(!reverseMode&&currentTrack>=0&&$("audio").duration)updateTonearm($("audio").currentTime/$("audio").duration)};
 $("play").onclick=()=>{
