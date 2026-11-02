@@ -245,7 +245,7 @@ function updateTonearm(progress=0){
  const position=(trackOffset+Math.max(0,Math.min(1,progress)))/count;
  // Ease the arm movement: smaller steps near the beginning, wider spacing toward the end.
  const easedPosition=0.45*position+0.55*position*position;
- arm.style.transform="rotate("+(-30+easedPosition*25)+"deg)";
+ arm.style.transform="rotate("+(-30+easedPosition*18)+"deg)";
 }
 function startSpin(){$("platter").classList.add("spinning");updateTonearm($("audio").duration?$("audio").currentTime/$("audio").duration:0)}
 function stopAudio(){stopPlayback()}
