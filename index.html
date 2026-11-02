@@ -69,96 +69,120 @@ footer{text-align:center;color:#a99a80;font:11px Arial;padding:5px 15px 25px}
 <audio id="audio"></audio>
 <script>
 const albums=[
-{title:"Please Please Me",year:"1963",tracks:["I Saw Her Standing There","Misery","Anna (Go to Him)","Chains","Boys","Ask Me Why","Please Please Me","Love Me Do"]},
-{title:"With The Beatles",year:"1963",tracks:["It Won't Be Long","All I've Got to Do","All My Loving","Don't Bother Me","Little Child","Till There Was You","Please Mister Postman"]},
-{title:"A Hard Day's Night",year:"1964",tracks:["A Hard Day's Night","I Should Have Known Better","If I Fell","I'm Happy Just to Dance with You","And I Love Her","Tell Me Why"]},
-{title:"Beatles for Sale",year:"1964",tracks:["No Reply","I'm a Loser","Baby's in Black","Rock and Roll Music","I'll Follow the Sun","Eight Days a Week"]},
-{title:"Help!",year:"1965",tracks:["Help!","The Night Before","You've Got to Hide Your Love Away","I Need You","Another Girl","You're Going to Lose That Girl"]},
-{title:"Rubber Soul",year:"1965",tracks:["Drive My Car","Norwegian Wood","You Won't See Me","Nowhere Man","Think for Yourself","The Word","Michelle"]},
-{title:"Revolver",year:"1966",tracks:["Taxman","Eleanor Rigby","I'm Only Sleeping","Love You To","Here, There and Everywhere","Yellow Submarine","She Said She Said"]},
-{title:"Sgt. Pepper's",year:"1967",tracks:["Sgt. Pepper's Lonely Hearts Club Band","With a Little Help from My Friends","Lucy in the Sky with Diamonds","Getting Better","Fixing a Hole","She's Leaving Home"]},
-{title:"Magical Mystery Tour",year:"1967",tracks:["Magical Mystery Tour","The Fool on the Hill","Flying","Blue Jay Way","Your Mother Should Know","I Am the Walrus"]},
-{title:"The Beatles",year:"1968",tracks:["Back in the U.S.S.R.","Dear Prudence","Glass Onion","Ob-La-Di, Ob-La-Da","Wild Honey Pie","The Continuing Story of Bungalow Bill"]},
-{title:"Abbey Road",year:"1969",tracks:["Come Together","Something","Maxwell's Silver Hammer","Oh! Darling","Octopus's Garden","I Want You (She's So Heavy)"]},
-{title:"Let It Be",year:"1970",tracks:["Two of Us","Dig a Pony","Across the Universe","I Me Mine","Dig It","Let It Be","The Long and Winding Road"]}
+{title:"Please Please Me",year:"1963",sideAEnd:7,tracks:["I Saw Her Standing There","Misery","Anna (Go to Him)","Chains","Boys","Ask Me Why","Please Please Me","Love Me Do","P.S. I Love You","Baby It's You","Do You Want to Know a Secret","A Taste of Honey","There's a Place","Twist and Shout"]},
+{title:"With The Beatles",year:"1963",sideAEnd:7,tracks:["It Won't Be Long","All I've Got to Do","All My Loving","Don't Bother Me","Little Child","Till There Was You","Please Mister Postman","Roll Over Beethoven","Hold Me Tight","You Really Got a Hold on Me","I Wanna Be Your Man","Devil in Her Heart","Not a Second Time","Money (That's What I Want)"]},
+{title:"A Hard Day's Night",year:"1964",sideAEnd:7,tracks:["A Hard Day's Night","I Should Have Known Better","If I Fell","I'm Happy Just to Dance with You","And I Love Her","Tell Me Why","Can't Buy Me Love","Any Time at All","I'll Cry Instead","Things We Said Today","When I Get Home","You Can't Do That","I'll Be Back"]},
+{title:"Beatles for Sale",year:"1964",sideAEnd:7,tracks:["No Reply","I'm a Loser","Baby's in Black","Rock and Roll Music","I'll Follow the Sun","Mr. Moonlight","Kansas City / Hey-Hey-Hey-Hey!","Eight Days a Week","Words of Love","Honey Don't","Every Little Thing","I Don't Want to Spoil the Party","What You're Doing","Everybody's Trying to Be My Baby"]},
+{title:"Help!",year:"1965",sideAEnd:7,tracks:["Help!","The Night Before","You've Got to Hide Your Love Away","I Need You","Another Girl","You're Going to Lose That Girl","Ticket to Ride","Act Naturally","It's Only Love","You Like Me Too Much","Tell Me What You See","I've Just Seen a Face","Yesterday","Dizzy Miss Lizzy"]},
+{title:"Rubber Soul",year:"1965",sideAEnd:7,tracks:["Drive My Car","Norwegian Wood (This Bird Has Flown)","You Won't See Me","Nowhere Man","Think for Yourself","The Word","Michelle","What Goes On","Girl","I'm Looking Through You","In My Life","Wait","If I Needed Someone","Run for Your Life"]},
+{title:"Revolver",year:"1966",sideAEnd:7,tracks:["Taxman","Eleanor Rigby","I'm Only Sleeping","Love You To","Here, There and Everywhere","Yellow Submarine","She Said She Said","Good Day Sunshine","And Your Bird Can Sing","For No One","Doctor Robert","I Want to Tell You","Got to Get You into My Life","Tomorrow Never Knows"]},
+{title:"Sgt. Pepper's",year:"1967",sideAEnd:7,tracks:["Sgt. Pepper's Lonely Hearts Club Band","With a Little Help from My Friends","Lucy in the Sky with Diamonds","Getting Better","Fixing a Hole","She's Leaving Home","Being for the Benefit of Mr. Kite!","Within You Without You","When I'm Sixty-Four","Lovely Rita","Good Morning Good Morning","Sgt. Pepper's (Reprise)","A Day in the Life"]},
+{title:"Magical Mystery Tour",year:"1967",sideAEnd:6,tracks:["Magical Mystery Tour","The Fool on the Hill","Flying","Blue Jay Way","Your Mother Should Know","I Am the Walrus","Hello, Goodbye","Strawberry Fields Forever","Penny Lane","Baby You're a Rich Man","All You Need Is Love"]},
+{title:"The Beatles (White Album)",year:"1968",sideAEnd:15,tracks:["Back in the U.S.S.R.","Dear Prudence","Glass Onion","Ob-La-Di, Ob-La-Da","Wild Honey Pie","The Continuing Story of Bungalow Bill","While My Guitar Gently Weeps","Happiness Is a Warm Gun","Martha My Dear","I'm So Tired","Blackbird","Piggies","Rocky Raccoon","Don't Pass Me By","Why Don't We Do It in the Road?","I Will","Julia","Birthday","Yer Blues","Mother Nature's Son","Everybody's Got Something to Hide Except Me and My Monkey","Sexy Sadie","Helter Skelter","Long, Long, Long","Revolution 1","Honey Pie","Savoy Truffle","Cry Baby Cry","Revolution 9","Good Night"]},
+{title:"Abbey Road",year:"1969",sideAEnd:6,tracks:["Come Together","Something","Maxwell's Silver Hammer","Oh! Darling","Octopus's Garden","I Want You (She's So Heavy)","Here Comes the Sun","Because","You Never Give Me Your Money","Sun King","Mean Mr. Mustard","Polythene Pam","She Came in Through the Bathroom Window","Golden Slumbers","Carry That Weight","The End","Her Majesty"]},
+{title:"Let It Be",year:"1970",sideAEnd:6,tracks:["Two of Us","Dig a Pony","Across the Universe","I Me Mine","Dig It","Let It Be","Maggie Mae","I've Got a Feeling","One After 909","The Long and Winding Road","For You Blue","Get Back"]}
 ];
 const $=id=>document.getElementById(id);
-let current=-1,side="A",currentTrack=-1,custom=[],db,activeObjectUrl=null;
-const request=indexedDB.open("BeatlesRecordRoomLibrary",2);
+let current=-1,side="A",currentTrack=-1,db=null,activeObjectUrl=null;
+const DB_NAME="BeatlesRecordRoomLibrary";
+const request=indexedDB.open(DB_NAME,2);
 request.onupgradeneeded=e=>{
- db=e.target.result;
- if(!db.objectStoreNames.contains("songs"))db.createObjectStore("songs",{keyPath:"id",autoIncrement:true});
- if(!db.objectStoreNames.contains("trackAudio"))db.createObjectStore("trackAudio",{keyPath:"key"});
+ const d=e.target.result;
+ if(!d.objectStoreNames.contains("songs"))d.createObjectStore("songs",{keyPath:"id",autoIncrement:true});
+ if(!d.objectStoreNames.contains("trackAudio"))d.createObjectStore("trackAudio",{keyPath:"key"});
 };
-request.onsuccess=e=>{db=e.target.result;loadCustom()};
+request.onsuccess=e=>{db=e.target.result;removeAccidentalImports();renderShelf();if(current>=0)renderTracks()};
 request.onerror=()=>{$("trackName").textContent="Browser storage unavailable; audio may not persist."};
-function allRecords(){return albums}
-function visibleTracks(){const a=allRecords()[current];if(!a)return[];return side==="A"?a.tracks.slice(0,7):a.tracks.slice(7,14)}
-function trackKey(){return current+"|"+side+"|"+currentTrack}
-function loadCustom(){renderShelf();if(current>=0)renderTracks()}
-function renderShelf(){const shelf=$("shelf");shelf.innerHTML="";allRecords().forEach((a,i)=>{const el=document.createElement("div");el.className="album"+(i===current?" active":"");const cover=document.createElement("div");cover.className="cover";cover.textContent=a.title;const small=document.createElement("small");small.textContent=a.year;el.append(cover,small);el.onclick=()=>selectAlbum(i);shelf.append(el)})}
-function selectAlbum(i){stopAudio();current=i;side="A";currentTrack=-1;const a=allRecords()[i];$("albumName").textContent=a.title;$("label").textContent=a.title.toUpperCase();$("trackName").textContent=a.year+" • SIDE A";$("flip").textContent="FLIP TO SIDE B";renderTracks();renderShelf()}
-function renderTracks(){
- const box=$("tracks");box.innerHTML="";const a=allRecords()[current];
- if(!a){box.textContent="Select a record to see its tracks.";return}
- const tracks=visibleTracks();
- if(!tracks.length){box.textContent="No tracks listed on this side yet.";return}
- tracks.forEach((t,i)=>{
-  const actualIndex=side==="A"?i:i+7;
-  const row=document.createElement("div");row.className="track"+(actualIndex===currentTrack?" selected":"");
-  const name=document.createElement("span");name.textContent=(i+1)+". "+t;
-  const attach=document.createElement("button");attach.textContent="＋ AUDIO";attach.style.float="right";attach.style.padding="5px 8px";attach.onclick=e=>{e.stopPropagation();currentTrack=actualIndex;$("audioFiles").click()};
-  const status=document.createElement("small");status.style.marginLeft="8px";status.textContent="";
-  const check=db?db.transaction("trackAudio","readonly").objectStore("trackAudio").get(current+"|"+side+"|"+actualIndex):null;
-  if(check)check.onsuccess=()=>{if(check.result)status.textContent=" • AUDIO SAVED"};
-  row.append(name,status,attach);row.onclick=()=>playTrack(actualIndex);box.append(row);
+function sideStart(a){return side==="A"?0:a.sideAEnd}
+function sideEnd(a){return side==="A"?a.sideAEnd:a.tracks.length}
+function visibleTracks(){const a=albums[current];return a?a.tracks.slice(sideStart(a),sideEnd(a)):[]}
+function audioKey(albumIndex,trackIndex){return albumIndex+"|"+trackIndex}
+function removeAccidentalImports(){
+ if(!db||!db.objectStoreNames.contains("songs"))return;
+ const tx=db.transaction("songs","readwrite"),store=tx.objectStore("songs"),req=store.getAll();
+ req.onsuccess=()=>{
+  (req.result||[]).forEach(song=>{
+   const name=String(song.name||song.fileName||"").replace(/\.[^.]+$/,"").trim().toLowerCase();
+   if(name==="i saw her standing there")store.delete(song.id);
+  });
+ };
+}
+function renderShelf(){
+ const shelf=$("shelf");shelf.innerHTML="";
+ albums.forEach((a,i)=>{
+  const el=document.createElement("div");el.className="album"+(i===current?" active":"");
+  const cover=document.createElement("div");cover.className="cover";cover.textContent=a.title;
+  const small=document.createElement("small");small.textContent=a.year;
+  el.append(cover,small);el.onclick=()=>selectAlbum(i);shelf.append(el);
  });
 }
-function playTrack(i){
- const a=allRecords()[current];if(!a)return;currentTrack=i;
- const title=a.tracks[i];$("trackName").textContent="SIDE "+side+" • "+title;renderTracks();
- if(!db){startSpin();return}
- const key=current+"|"+side+"|"+i;
- const req=db.transaction("trackAudio","readonly").objectStore("trackAudio").get(key);
+function selectAlbum(i){
+ stopAudio();current=i;side="A";currentTrack=-1;
+ const a=albums[i];$("albumName").textContent=a.title;$("label").textContent=a.title.toUpperCase();
+ $("trackName").textContent=a.year+" • SIDE A";$("flip").textContent="FLIP TO SIDE B";
+ renderTracks();renderShelf();
+}
+function renderTracks(){
+ const box=$("tracks");box.innerHTML="";
+ if(current<0){box.textContent="Choose an album to see its tracks.";return}
+ const a=albums[current],start=sideStart(a),end=sideEnd(a);
+ a.tracks.slice(start,end).forEach((t,i)=>{
+  const index=start+i,row=document.createElement("div");row.className="track"+(index===currentTrack?" selected":"");
+  const name=document.createElement("span");name.textContent=(i+1)+". "+t;
+  const status=document.createElement("small");status.style.marginLeft="8px";
+  const attach=document.createElement("button");attach.textContent="＋ AUDIO";attach.style.float="right";attach.style.padding="5px 8px";
+  attach.onclick=e=>{e.stopPropagation();currentTrack=index;$("audioFiles").dataset.trackIndex=String(index);$("audioFiles").click()};
+  if(db){const check=db.transaction("trackAudio","readonly").objectStore("trackAudio").get(audioKey(current,index));check.onsuccess=()=>{if(check.result)status.textContent=" • AUDIO SAVED"}}
+  row.append(name,status,attach);row.onclick=()=>playTrack(index);box.append(row);
+ });
+}
+function playTrack(index){
+ if(current<0||index<0||index>=albums[current].tracks.length)return;
+ currentTrack=index;const a=albums[current],track=a.tracks[index];
+ side=index<a.sideAEnd?"A":"B";
+ $("flip").textContent=side==="A"?"FLIP TO SIDE B":"FLIP TO SIDE A";
+ $("trackName").textContent="SIDE "+side+" • "+track;renderTracks();
+ if(!db){stopAudio();return}
+ const req=db.transaction("trackAudio","readonly").objectStore("trackAudio").get(audioKey(current,index));
  req.onsuccess=()=>{
+  if(currentTrack!==index)return;
   if(req.result&&req.result.blob){
    if(activeObjectUrl)URL.revokeObjectURL(activeObjectUrl);
    activeObjectUrl=URL.createObjectURL(req.result.blob);$("audio").src=activeObjectUrl;
-   $("audio").play().then(startSpin).catch(()=>{$("trackName").textContent=title+" • Press PLAY to listen"});
-  }else{$("trackName").textContent=title+" • No audio attached yet";stopAudio();}
+   $("audio").play().then(startSpin).catch(()=>{$("trackName").textContent=track+" • Press PLAY to listen"});
+  }else{$("trackName").textContent=track+" • No audio attached yet";stopAudio()}
  };
 }
-function startSpin(){ $("platter").classList.add("spinning");$("arm").classList.add("playing")}
-function stopAudio(){ $("audio").pause();$("platter").classList.remove("spinning");$("arm").classList.remove("playing")}
-$("play").onclick=()=>{if(current<0){selectAlbum(0);return}if(currentTrack<0){const first=side==="A"?0:7;playTrack(first)}else{$("audio").play().then(startSpin).catch(()=>{})}};
+function startSpin(){$("platter").classList.add("spinning");$("arm").classList.add("playing")}
+function stopAudio(){$("audio").pause();$("platter").classList.remove("spinning");$("arm").classList.remove("playing")}
+$("play").onclick=()=>{
+ if(current<0){selectAlbum(0);return}
+ if(currentTrack<0)playTrack(sideStart(albums[current]));
+ else $("audio").play().then(startSpin).catch(()=>{});
+};
 $("pause").onclick=()=>{ $("audio").pause();$("platter").classList.remove("spinning");$("arm").classList.remove("playing")};
 $("flip").onclick=()=>{
+ if(current<0){selectAlbum(0);return}
  stopAudio();side=side==="A"?"B":"A";currentTrack=-1;
  $("flip").textContent=side==="A"?"FLIP TO SIDE B":"FLIP TO SIDE A";
- $("trackName").textContent=allRecords()[current].title+" • SIDE "+side;
- renderTracks();
+ $("trackName").textContent=albums[current].title+" • SIDE "+side;renderTracks();
 };
-$("audio").onended=()=>{const tracks=visibleTracks();const next=currentTrack+1;if(next<(side==="A"?7:14)&&next<(allRecords()[current]?.tracks.length||0))playTrack(next);else stopAudio()};
+$("audio").onended=()=>{
+ if(current<0)return;
+ const a=albums[current],next=currentTrack+1;
+ if(next<sideEnd(a))playTrack(next);else stopAudio();
+};
 $("audioFiles").onchange=e=>{
- const file=e.target.files[0];e.target.value="";
- if(!file||!db||current<0||currentTrack<0)return;
- const key=current+"|"+side+"|"+currentTrack;
+ const file=e.target.files[0],index=Number(e.target.dataset.trackIndex);e.target.value="";
+ if(!file||!db||current<0||!Number.isInteger(index))return;
+ const albumIndex=current,key=audioKey(albumIndex,index);
  const tx=db.transaction("trackAudio","readwrite");
  tx.objectStore("trackAudio").put({key,blob:file,fileName:file.name});
- tx.oncomplete=()=>{$("trackName").textContent="Audio attached to: "+allRecords()[current].tracks[currentTrack];renderTracks()};
+ tx.oncomplete=()=>{
+  if(current===albumIndex){currentTrack=index;$("trackName").textContent="Audio attached to: "+albums[albumIndex].tracks[index];renderTracks()}
+ };
  tx.onerror=()=>alert("Could not save that audio file. Your browser may be out of storage.");
 };
-renderShelf();$("platter").classList.remove("spinning");$("arm").classList.remove("playing")}
-function renderTracks(){const a=allRecords()[current];const box=$("tracks");box.innerHTML="";if(!a){box.textContent="Select a record to see its tracks.";return}a.tracks.forEach((t,i)=>{const d=document.createElement("div");d.className="track"+(i===currentTrack?" selected":"");d.textContent=(i+1)+". "+t;d.onclick=()=>playTrack(i);box.append(d)})}
-function playTrack(i){const a=allRecords()[current];if(!a)return;currentTrack=i;const t=a.tracks[i];$("trackName").textContent="SIDE "+side+" • "+t;renderTracks();if(a.custom){const song=custom.find(s=>s.id===a.id);if(song){const url=URL.createObjectURL(song.blob);$("audio").src=url;$("audio").play().then(startSpin).catch(()=>{$("trackName").textContent="Press PLAY to start: "+t})}}else{$("trackName").textContent=t+" • Add your own audio to hear it here";startSpin()}}
-function startSpin(){playing=true;$("platter").classList.add("spinning");$("arm").classList.add("playing")}
-function stopAudio(){playing=false;$("audio").pause();$("platter").classList.remove("spinning");$("arm").classList.remove("playing")}
-$("play").onclick=()=>{if(current<0){selectAlbum(0);return}const a=allRecords()[current];if(a.custom&&currentTrack<0)playTrack(0);else if(a.custom){$("audio").play().then(startSpin).catch(()=>{});}else{if(currentTrack<0)currentTrack=0;playTrack(currentTrack)}};
-$("pause").onclick=()=>{ $("audio").pause();playing=false;$("platter").classList.remove("spinning");$("arm").classList.remove("playing")};
-$("flip").onclick=()=>{side=side==="A"?"B":"A";$("trackName").textContent="SIDE "+side+" • "+(current>=0?allRecords()[current].title:"No record selected");};
-$("audio").onended=()=>{const a=allRecords()[current];if(a&&a.custom)stopAudio();else if(a&&currentTrack<a.tracks.length-1)playTrack(currentTrack+1);else stopAudio()};
-function loadCustom(){const tx=db.transaction("songs","readonly");tx.objectStore("songs").getAll().onsuccess=e=>{custom=e.target.result||[];renderShelf()}}
-$("audioFiles").onchange=e=>{if(!db){alert("Storage is not ready yet. Try again in a moment.");return}const files=[...e.target.files].filter(f=>f.type.startsWith("audio/"));if(!files.length)return;const tx=db.transaction("songs","readwrite");files.forEach(file=>tx.objectStore("songs").add({name:file.name.replace(/\.[^.]+$/,""),blob:file}));tx.oncomplete=()=>{loadCustom();$("trackName").textContent=files.length+" song(s) added and saved in this browser.";e.target.value=""};tx.onerror=()=>alert("Could not save those files. Your browser may be out of storage.")};
 renderShelf();
 </script>
 </body></html>
