@@ -125,6 +125,7 @@ const albums=[
 {title:"Let It Be",year:"1970",type:"SINGLE",sideAEnd:1,tracks:["Let It Be","You Know My Name (Look Up the Number)"]}
 ];
 const coverImages=[
+
 "https://sharklemez.hu/img/74396/0094638241614/500x500%2Cr/0094638241614.jpg?time=1722320619",
 "https://vinylbazar.com/img/thumbs/7c5240692ffcf1be5ee4c329b37a82c9-1240x.jpg",
 "https://vinylgoatstl.com/cdn/shop/files/1706309122830.jpg?v=1706310100&width=1445",
@@ -135,22 +136,20 @@ const coverImages=[
 "https://dominicwinter.blob.core.windows.net/stock/133428-0-medium.jpg?v=63708730028113",
 "https://i.ebayimg.com/images/g/NA0AAOSwDRtnTPJc/s-l1200.jpg",
 "https://yourvinylshop.com/cdn/shop/files/vintage-vinyl-records-0926_f847fb9c-8a19-43fb-b6a7-13ef4673be7d_720x%402x.jpg?v=1696984806",
-"https://www.sweelee.co.id/cdn/shop/files/products_2FFLS-VINH-BD-0602577915123_2FFLS-VINH-BD-0602577915123_1696409160640_1200x1200.jpg?v=1721290411",
-"https://yourvinylshop.com/cdn/shop/files/vintage-vinyl-records-0230_df9197e9-0a49-4358-b294-747685956035.jpg?v=1744379515"
-,
-"https://www.yokono.co.uk/collection/beatles/uk/ep/ep_images/magical_mono.jpg",
-"https://www.yokono.co.uk/collection/beatles/uk/ep/ep_images/box/twist.jpg",
-"https://www.yokono.co.uk/collection/beatles/uk/ep/ep_images/box/hits.jpg",
-"https://www.yokono.co.uk/collection/beatles/uk/ep/ep_images/box/no1.jpg",
-"https://www.yokono.co.uk/collection/beatles/uk/ep/ep_images/box/all.jpg",
-"https://www.yokono.co.uk/collection/beatles/uk/ep/ep_images/box/long.jpg",
-"https://www.yokono.co.uk/collection/beatles/uk/ep/ep_images/box/hard1.jpg",
-"https://www.yokono.co.uk/collection/beatles/uk/ep/ep_images/box/hard2.jpg",
-"https://www.yokono.co.uk/collection/beatles/uk/ep/ep_images/box/sale1.jpg",
-"https://www.yokono.co.uk/collection/beatles/uk/ep/ep_images/box/sale2.jpg",
-"https://www.yokono.co.uk/collection/beatles/uk/ep/ep_images/box/million.jpg",
-"https://www.yokono.co.uk/collection/beatles/uk/ep/ep_images/box/yes.jpg",
-"https://www.yokono.co.uk/collection/beatles/uk/ep/ep_images/box/nowhere.jpg",
+"https://www.sweelee.co.id/cdn/shop/files/products_2FFLS-VINH-BD-0602577915123_2FFLS-VINH-BD-0602577915123_1696409160640_1200x1200.jpg?v=1721290411",,
+"https://aboutthebeatles.com/wp-content/uploads/twist-and-shout-ep.jpg",
+"https://aboutthebeatles.com/wp-content/uploads/beatles-hits-ep.jpg",
+"https://aboutthebeatles.com/wp-content/uploads/beatles-no-1-ep.jpg",
+"https://aboutthebeatles.com/wp-content/uploads/all-my-loving-ep.jpg",
+"https://aboutthebeatles.com/wp-content/uploads/long-tall-sally-ep.jpg",
+"https://aboutthebeatles.com/wp-content/uploads/extracts-from-the-film-a-hard-days-night-ep.jpg",
+"https://aboutthebeatles.com/wp-content/uploads/extracts-from-the-album-a-hard-days-night-ep.jpg",
+"https://aboutthebeatles.com/wp-content/uploads/beatles-for-sale-ep.jpg",
+"https://aboutthebeatles.com/wp-content/uploads/beatles-for-sale-no-2-ep.jpg",
+"https://aboutthebeatles.com/wp-content/uploads/the-beatles-million-sellers-ep.jpg",
+"https://aboutthebeatles.com/wp-content/uploads/yesterday-ep.jpg",
+"https://aboutthebeatles.com/wp-content/uploads/nowhere-man-ep.jpg",
+"https://aboutthebeatles.com/wp-content/uploads/magical-mystery-tour-ep.jpg",
 "https://files.ekmcdn.com/planetearthrec/images/the-beatles-i-want-to-hold-your-hand-vinyl-record-7-inch-parlophone-1963-88776-1-p.jpeg?h=1000&v=57BFD4C6-7EDB-481C-97DB-C888E036AC7A&w=1000",
 "https://files.ekmcdn.com/planetearthrec/images/the-beatles-i-want-to-hold-your-hand-vinyl-record-7-inch-parlophone-1963-88776-1-p.jpeg?h=1000&v=57BFD4C6-7EDB-481C-97DB-C888E036AC7A&w=1000",
 "https://files.ekmcdn.com/planetearthrec/images/the-beatles-i-want-to-hold-your-hand-vinyl-record-7-inch-parlophone-1963-88776-1-p.jpeg?h=1000&v=57BFD4C6-7EDB-481C-97DB-C888E036AC7A&w=1000",
@@ -206,7 +205,7 @@ function removeAccidentalImports(){
 }
 function renderShelf(){
  const shelf=$("shelf");shelf.innerHTML="";
- albums.forEach((a,i)=>{
+ albums.map((a,i)=>({a,i})).sort((x,y)=>{const rank=v=>v.type==="EP"?1:v.type==="SINGLE"?2:0;return rank(x.a)-rank(y.a)||Number(x.a.year)-Number(y.a.year)||x.i-y.i}).forEach(({a,i})=>{
   const el=document.createElement("div");el.className="album"+(i===current?" active":"");
   const cover=document.createElement("div");cover.className="cover";const img=document.createElement("img");img.src=coverImages[i]||"";img.alt=a.title+" record sleeve";img.loading="lazy";img.onerror=()=>{img.remove();cover.textContent=a.title;cover.style.padding="8px";cover.style.display="grid";cover.style.placeItems="center";cover.style.color="#e9dfc9";cover.style.fontSize="14px"};cover.append(img);
   const small=document.createElement("small");small.textContent=(a.type?a.type+" • ":"")+a.year;
