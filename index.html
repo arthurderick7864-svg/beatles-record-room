@@ -267,7 +267,7 @@ function stopAudio(){stopPlayback()}
 $("audio").ontimeupdate=()=>{if(!reverseMode&&currentTrack>=0&&$("audio").duration)updateTonearm($("audio").currentTime/$("audio").duration)};
 $("play").onclick=()=>{
  if(current<0){selectAlbum(0);return}
- if(currentTrack<0)playTrack(sideStart(albums[current]));
+ if(currentTrack<0){const a=albums[current];playTrack(reverseMode?sideEnd(a)-1:sideStart(a));}
  else playCurrent();
 };
 $("pause").onclick=()=>{if(reverseMode){stopReverse(true);pausePlatter();updateTonearm(reverseDuration?reverseElapsed/reverseDuration:0,true)}else{$("audio").pause();pausePlatter();updateTonearm($("audio").duration?$("audio").currentTime/$("audio").duration:0)}};
