@@ -268,7 +268,7 @@ $("audio").onended=()=>{
  if(reverseMode)return;
  if(current<0)return;
  const a=albums[current],next=currentTrack+1;
- if(next<sideEnd(a))playTrack(next);else{ $("platter").classList.remove("spinning"); stopReverse(); $("audio").pause(); updateTonearm(1); $("arm").style.transform="rotate(-12deg)"; }
+ if(next<sideEnd(a))playTrack(next);else{ $("platter").classList.remove("spinning"); stopReverse(); $("audio").pause(); updateTonearm(1); $("arm").style.transform="rotate(-3deg)"; }
 };
 $("audioFiles").onchange=e=>{
  const file=e.target.files[0],index=Number(e.target.dataset.trackIndex);e.target.value="";
