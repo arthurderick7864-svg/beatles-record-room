@@ -224,7 +224,8 @@ $("play").onclick=()=>{
  else playCurrent();
 };
 $("pause").onclick=()=>{ $("audio").pause();stopReverse();$("platter").classList.remove("spinning");$("arm").classList.remove("playing")};
-$("volume").oninput=e=>setVolume(e.target.value);\n$("reverse").onclick=()=>{reverseMode=!reverseMode;$("reverse").textContent=reverseMode?"↶ REVERSE: ON":"↶ REVERSE: OFF";if(currentBlob){stopPlayback();playCurrent()}};
+$("volume").oninput=e=>setVolume(e.target.value);
+$("reverse").onclick=()=>{reverseMode=!reverseMode;$("reverse").textContent=reverseMode?"↶ REVERSE: ON":"↶ REVERSE: OFF";if(currentBlob){stopPlayback();playCurrent()}};
 $("flip").onclick=()=>{
  if(current<0){selectAlbum(0);return}
  stopAudio();side=side==="A"?"B":"A";currentTrack=-1;
