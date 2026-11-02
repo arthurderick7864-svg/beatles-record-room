@@ -173,7 +173,7 @@ const albumCovers={
 "Magical Mystery Tour":"https://www.yokono.co.uk/collection/beatles/uk/guide/ep/sleeve/magical_sleeve.gif",
 "The Beatles (White Album)":"https://www.sweelee.co.id/cdn/shop/files/products_2FFLS-VINH-BD-0602577915123_2FFLS-VINH-BD-0602577915123_1696409160640_1200x1200.jpg?v=1721290411",
 "Yellow Submarine":"https://upload.wikimedia.org/wikipedia/commons/a/ac/TheBeatles-YellowSubmarinealbumcover.jpg",
-"Abbey Road":"https://www.sweelee.co.id/cdn/shop/files/products_2FFLS-VINH-BD-0602577915123_2FFLS-VINH-BD-0602577915123_1696409160640_1200x1200.jpg?v=1721290411",
+"Abbey Road":"https://upload.wikimedia.org/wikipedia/commons/4/42/The_Beatles_Abbey_Road_album_cover.jpg",
 "Let It Be":"https://upload.wikimedia.org/wikipedia/commons/7/7a/The_Beatles_-_Let_It_Be.png",
 "Yellow Submarine Songtrack":"https://www.thebeatles.com/sites/default/files/styles/max_2600x2600/public/2021-06/YS-A.jpg?itok=L1PgcG_l"
 };
@@ -214,20 +214,43 @@ function renderCollectionTabs(){
  collectionTabs.forEach(([key,label])=>{const b=document.createElement("button");b.textContent=label;b.className=activeCollection===key?"active":"";b.onclick=()=>{activeCollection=key;renderCollectionTabs();renderShelf()};tabs.append(b)});
 }
 const epCovers={
-"Twist and Shout":"https://aboutthebeatles.com/wp-content/uploads/twist-and-shout-ep.jpg",
-"The Beatles' Hits":"https://aboutthebeatles.com/wp-content/uploads/the-beatles-hits-ep.jpg",
-"The Beatles No. 1":"https://aboutthebeatles.com/wp-content/uploads/the-beatles-no-1-ep.jpg",
-"All My Loving":"https://aboutthebeatles.com/wp-content/uploads/all-my-loving-ep.jpg",
-"Long Tall Sally":"https://aboutthebeatles.com/wp-content/uploads/long-tall-sally-ep.jpg",
-"Extracts From the Film A Hard Day's Night":"https://aboutthebeatles.com/wp-content/uploads/extracts-from-the-film-a-hard-days-night-ep.jpg",
-"Extracts From the Album A Hard Day's Night":"https://aboutthebeatles.com/wp-content/uploads/extracts-from-the-album-a-hard-days-night-ep.jpg",
-"Beatles for Sale":"https://aboutthebeatles.com/wp-content/uploads/beatles-for-sale-ep.jpg",
-"Beatles for Sale No. 2":"https://aboutthebeatles.com/wp-content/uploads/beatles-for-sale-no-2-ep.jpg",
-"The Beatles' Million Sellers":"https://aboutthebeatles.com/wp-content/uploads/the-beatles-million-sellers-ep.jpg",
-"Yesterday":"https://aboutthebeatles.com/wp-content/uploads/yesterday-ep.jpg",
-"Nowhere Man":"https://aboutthebeatles.com/wp-content/uploads/nowhere-man-ep.jpg"
+"Twist and Shout":"https://www.yokono.co.uk/collection/beatles/uk/ep/ep_images/box/twist.jpg",
+"The Beatles' Hits":"https://www.yokono.co.uk/collection/beatles/uk/ep/ep_images/box/hits.jpg",
+"The Beatles No. 1":"https://www.yokono.co.uk/collection/beatles/uk/ep/ep_images/box/no1.jpg",
+"All My Loving":"https://www.yokono.co.uk/collection/beatles/uk/ep/ep_images/box/all.jpg",
+"Long Tall Sally":"https://www.yokono.co.uk/collection/beatles/uk/ep/ep_images/box/long.jpg",
+"Extracts From the Film A Hard Day's Night":"https://www.yokono.co.uk/collection/beatles/uk/ep/ep_images/box/hard1.jpg",
+"Extracts From the Album A Hard Day's Night":"https://www.yokono.co.uk/collection/beatles/uk/ep/ep_images/box/hard2.jpg",
+"Beatles for Sale":"https://www.yokono.co.uk/collection/beatles/uk/ep/ep_images/box/sale1.jpg",
+"Beatles for Sale No. 2":"https://www.yokono.co.uk/collection/beatles/uk/ep/ep_images/box/sale2.jpg",
+"The Beatles' Million Sellers":"https://www.yokono.co.uk/collection/beatles/uk/ep/ep_images/box/million.jpg",
+"Yesterday":"https://www.yokono.co.uk/collection/beatles/uk/ep/ep_images/box/yes.jpg",
+"Nowhere Man":"https://www.yokono.co.uk/collection/beatles/uk/ep/ep_images/box/nowhere.jpg"
 };
-const parlophoneSleeve="https://www.yokono.co.uk/collection/beatles/uk/single/single_images/large_images/fromme_sleeve_large.jpg";
+const singleCovers={
+"Love Me Do":"https://www.yokono.co.uk/collection/beatles/uk/single/single_images/box/lovemedo.jpg",
+"Please Please Me":"https://www.yokono.co.uk/collection/beatles/uk/single/single_images/box/please.jpg",
+"From Me to You":"https://www.yokono.co.uk/collection/beatles/uk/single/single_images/box/from.jpg",
+"She Loves You":"https://www.yokono.co.uk/collection/beatles/uk/single/single_images/box/sheloves.jpg",
+"I Want to Hold Your Hand":"https://www.yokono.co.uk/collection/beatles/uk/single/single_images/box/iwantto.jpg",
+"Can't Buy Me Love":"https://www.yokono.co.uk/collection/beatles/uk/single/single_images/box/cant.jpg",
+"A Hard Day's Night":"https://www.yokono.co.uk/collection/beatles/uk/single/single_images/box/hard.jpg",
+"I Feel Fine":"https://www.yokono.co.uk/collection/beatles/uk/single/single_images/box/ifeel.jpg",
+"Ticket to Ride":"https://www.yokono.co.uk/collection/beatles/uk/single/single_images/box/ticket.jpg",
+"Help!":"https://www.yokono.co.uk/collection/beatles/uk/single/single_images/box/help.jpg",
+"We Can Work It Out / Day Tripper":"https://www.yokono.co.uk/collection/beatles/uk/single/single_images/box/wecan.jpg",
+"Paperback Writer":"https://www.yokono.co.uk/collection/beatles/uk/single/single_images/box/paper.jpg",
+"Yellow Submarine / Eleanor Rigby":"https://www.yokono.co.uk/collection/beatles/uk/single/single_images/box/yellow.jpg",
+"Penny Lane / Strawberry Fields Forever":"https://www.yokono.co.uk/collection/beatles/uk/single/single_images/box/straw.jpg",
+"All You Need Is Love":"https://www.yokono.co.uk/collection/beatles/uk/single/single_images/box/allyou.jpg",
+"Hello, Goodbye":"https://www.yokono.co.uk/collection/beatles/uk/single/single_images/box/hello.jpg",
+"Lady Madonna":"https://www.yokono.co.uk/collection/beatles/uk/single/single_images/box/lady.jpg",
+"Hey Jude":"https://www.yokono.co.uk/collection/beatles/uk/single/single_images/box/jude.jpg",
+"Get Back":"https://www.yokono.co.uk/collection/beatles/uk/single/single_images/box/getback.jpg",
+"The Ballad of John and Yoko":"https://www.yokono.co.uk/collection/beatles/uk/single/single_images/box/ballad.jpg",
+"Something / Come Together":"https://www.yokono.co.uk/collection/beatles/uk/single/single_images/box/some.jpg",
+"Let It Be":"https://www.yokono.co.uk/collection/beatles/uk/single/single_images/box/letitbe.jpg"
+};\nconst parlophoneSleeve="https://www.yokono.co.uk/collection/beatles/uk/single/single_images/large_images/fromme_sleeve_large.jpg";
 const appleSleeve="https://www.yokono.co.uk/collection/beatles/uk/guide/singles/sleeve/getback_solid_sleeve_up1.jpg";
 function renderShelf(){
  const shelf=$("shelf");shelf.innerHTML="";
@@ -237,7 +260,7 @@ function renderShelf(){
  }).sort((x,y)=>Number(x.a.year)-Number(y.a.year)||x.i-y.i).forEach(({a,i})=>{
   const el=document.createElement("div");el.className="album"+(i===current?" active":"");
   const cover=document.createElement("div");cover.className="cover";
-  const url=epCovers[a.title]||(a.type==="SINGLE"?(Number(a.year)>=1968?appleSleeve:parlophoneSleeve):albumCovers[a.title]||null);
+  const url=epCovers[a.title]||(a.type==="SINGLE"?(singleCovers[a.title]||null):albumCovers[a.title]||null);
   if(url){const img=document.createElement("img");img.src=url;img.alt=a.title+" record sleeve";img.loading="lazy";img.onerror=()=>{img.remove();cover.classList.add("generated");const inner=document.createElement("div");const title=document.createElement("div");title.className="sleeve-title";title.textContent=a.title;const sub=document.createElement("div");sub.className="sleeve-sub";sub.textContent=a.year+" • THE BEATLES";inner.append(title,sub);cover.append(inner)};cover.append(img)}
   else{cover.classList.add("generated");const inner=document.createElement("div"),title=document.createElement("div"),sub=document.createElement("div");title.className="sleeve-title";title.textContent=a.title;sub.className="sleeve-sub";sub.textContent=a.year+" • "+(a.collection==="POST"?"SOLO RELEASE":"THE BEATLES");inner.append(title,sub);cover.append(inner)}
   const small=document.createElement("small");small.textContent=(a.collection==="AMERICAN"?"US ALBUM":a.collection==="PRE"?"PRE-BEATLES":a.collection==="POST"?"SOLO • "+a.title.split(" — ")[0]:a.collection==="SPECIAL"?"SPECIAL RELEASE":a.type||"ALBUM")+" • "+a.year;
