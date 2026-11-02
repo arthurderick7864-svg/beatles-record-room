@@ -232,6 +232,7 @@ $("flip").onclick=()=>{
  $("trackName").textContent=albums[current].title+" • SIDE "+side;renderTracks();
 };
 $("audio").onended=()=>{
+ if(reverseMode)return;
  if(current<0)return;
  const a=albums[current],next=currentTrack+1;
  if(next<sideEnd(a))playTrack(next);else stopAudio();
