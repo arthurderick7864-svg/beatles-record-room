@@ -217,13 +217,14 @@ function playTrack(index){
  };
 }
 function startSpin(){$("platter").classList.add("spinning");$("arm").classList.add("playing")}
-function stopAudio(){$("audio").pause();$("platter").classList.remove("spinning");$("arm").classList.remove("playing")}
+function stopAudio(){stopPlayback()}
 $("play").onclick=()=>{
  if(current<0){selectAlbum(0);return}
  if(currentTrack<0)playTrack(sideStart(albums[current]));
  else playCurrent();
 };
-$("pause").onclick=()=>{ $("audio").pause();stopReverse();$("platter").classList.remove("spinning");$("arm").classList.remove("playing")};\n$("volume").oninput=e=>setVolume(e.target.value);\n$("reverse").onclick=()=>{reverseMode=!reverseMode;$("reverse").textContent=reverseMode?"↶ REVERSE: ON":"↶ REVERSE: OFF";if(currentBlob){stopPlayback();playCurrent()}};
+$("pause").onclick=()=>{ $("audio").pause();stopReverse();$("platter").classList.remove("spinning");$("arm").classList.remove("playing")};
+$("volume").oninput=e=>setVolume(e.target.value);\n$("reverse").onclick=()=>{reverseMode=!reverseMode;$("reverse").textContent=reverseMode?"↶ REVERSE: ON":"↶ REVERSE: OFF";if(currentBlob){stopPlayback();playCurrent()}};
 $("flip").onclick=()=>{
  if(current<0){selectAlbum(0);return}
  stopAudio();side=side==="A"?"B":"A";currentTrack=-1;
