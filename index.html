@@ -39,6 +39,8 @@ button:hover,.upload:hover{background:#684b35}button:disabled{opacity:.4;cursor:
 .library-title{grid-column:1/-1;text-align:center;letter-spacing:3px;font-size:13px;color:#e1c99d;margin:4px}
 footer{text-align:center;color:#a99a80;font:11px Arial;padding:5px 15px 25px}
 @media(max-width:760px){.room{grid-template-columns:1fr}.shelf{grid-template-columns:repeat(3,1fr)}.turntable{height:260px}.platter{width:210px;height:210px}}
+
+.collection-tabs{display:flex;flex-wrap:wrap;gap:7px;justify-content:center;margin:12px 0 16px}.collection-tabs button{padding:8px 10px;font-size:10px;letter-spacing:.7px}.collection-tabs button.active{background:#b58c55;color:#21180f;border-color:#f1d59b}.cover.generated{display:flex;align-items:center;justify-content:center;padding:12px;background:radial-gradient(circle at 50% 42%,#8a7251,#30251d 75%);color:#f0dfbd;text-align:center}.cover.generated .sleeve-title{font: bold 13px Georgia;letter-spacing:1px;text-transform:uppercase;text-shadow:0 2px 4px #000}.cover.generated .sleeve-sub{font:9px Arial;letter-spacing:2px;margin-top:9px;color:#d8c59e}
 </style>
 </head>
 <body>
@@ -46,6 +48,7 @@ footer{text-align:center;color:#a99a80;font:11px Arial;padding:5px 15px 25px}
 <main class="room">
 <section class="panel">
 <div class="library-title">THE RECORD SHELF</div>
+<div class="collection-tabs" id="collectionTabs"></div>
 <div class="shelf" id="shelf"></div>
 </section>
 <section class="panel">
@@ -122,10 +125,29 @@ const albums=[
 {title:"Get Back",year:"1969",type:"SINGLE",sideAEnd:1,tracks:["Get Back","Don't Let Me Down"]},
 {title:"The Ballad of John and Yoko",year:"1969",type:"SINGLE",sideAEnd:1,tracks:["The Ballad of John and Yoko","Old Brown Shoe"]},
 {title:"Something / Come Together",year:"1969",type:"SINGLE",sideAEnd:1,tracks:["Something","Come Together"]},
-{title:"Let It Be",year:"1970",type:"SINGLE",sideAEnd:1,tracks:["Let It Be","You Know My Name (Look Up the Number)"]}
+{title:"Let It Be",year:"1970",type:"SINGLE",sideAEnd:1,tracks:["Let It Be","You Know My Name (Look Up the Number)"]},
+{"title":"Meet the Beatles!","year":"1964","collection":"AMERICAN","sideAEnd":6,"tracks":["I Want to Hold Your Hand","I Saw Her Standing There","This Boy","It Won't Be Long","All I've Got to Do","All My Loving","Don't Bother Me","Little Child","Till There Was You","Hold Me Tight","I Wanna Be Your Man","Not a Second Time"]},
+{"title":"The Beatles' Second Album","year":"1964","collection":"AMERICAN","sideAEnd":6,"tracks":["Roll Over Beethoven","Thank You Girl","You Really Got a Hold on Me","Devil in Her Heart","Money (That's What I Want)","You Can't Do That","Long Tall Sally","I Call Your Name","Please Mister Postman","I'll Get You","She Loves You"]},
+{"title":"Something New","year":"1964","collection":"AMERICAN","sideAEnd":6,"tracks":["I'll Cry Instead","Things We Said Today","Any Time at All","When I Get Home","Slow Down","Matchbox","Tell Me Why","And I Love Her","I'm Happy Just to Dance with You","If I Fell"]},
+{"title":"Beatles '65","year":"1964","collection":"AMERICAN","sideAEnd":6,"tracks":["No Reply","I'm a Loser","Baby's in Black","Rock and Roll Music","I'll Follow the Sun","Mr. Moonlight","Honey Don't","I'll Be Back","She's a Woman","I Feel Fine"]},
+{"title":"Beatles VI","year":"1965","collection":"AMERICAN","sideAEnd":6,"tracks":["Kansas City / Hey-Hey-Hey-Hey!","Eight Days a Week","You Like Me Too Much","Bad Boy","I Don't Want to Spoil the Party","Words of Love","What You're Doing","Yes It Is","Dizzy Miss Lizzy","Tell Me What You See","Every Little Thing"]},
+{"title":"Yesterday and Today","year":"1966","collection":"AMERICAN","sideAEnd":6,"tracks":["Drive My Car","I'm Only Sleeping","Nowhere Man","Doctor Robert","Yesterday","Act Naturally","And Your Bird Can Sing","If I Needed Someone","We Can Work It Out","What Goes On","Day Tripper"]},
+{"title":"The Silver Beatles (Decca Audition)","year":"1962","collection":"PRE","sideAEnd":7,"tracks":["Like Dreamers Do","Money (That's What I Want)","Till There Was You","The Sheik of Araby","To Know Her Is to Love Her","Take Good Care of My Baby","Memphis, Tennessee","Sure to Fall","Hello Little Girl","Three Cool Cats","Crying, Waiting, Hoping","Love of the Loved","September in the Rain","Besame Mucho","Searchin'"]},
+{"title":"John Lennon — Plastic Ono Band","year":"1970","collection":"POST","sideAEnd":6,"tracks":["Mother","Hold On","I Found Out","Working Class Hero","Isolation","Remember","Love","Well Well Well","Look at Me","God","My Mummy's Dead"]},
+{"title":"Paul McCartney — McCartney","year":"1970","collection":"POST","sideAEnd":8,"tracks":["The Lovely Linda","That Would Be Something","Valentine Day","Every Night","Hot as Sun","Glasses","Junk","Man We Was Lonely","Oo You","Momma Miss America","Teddy Boy","Maybe I'm Amazed","Kreen-Akrore"]},
+{"title":"George Harrison — All Things Must Pass","year":"1970","collection":"POST","sideAEnd":6,"tracks":["I'd Have You Anytime","My Sweet Lord","Wah-Wah","Isn't It a Pity","What Is Life","If Not for You","Behind That Locked Door","Let It Down","Run of the Mill"]},
+{"title":"Ringo Starr — Sentimental Journey","year":"1970","collection":"POST","sideAEnd":6,"tracks":["Sentimental Journey","Night and Day","Whispering Grass","Bye Bye Blackbird","I'm a Fool to Care","Stardust","Blue, Turning Grey Over You","Love Is a Many-Splendored Thing"," บ"]},
+{"title":"Anthology 1","year":"1995","collection":"SPECIAL","sideAEnd":6,"tracks":["Free as a Bird","That'll Be the Day","In Spite of All the Danger","Hallelujah, I Love Her So","You'll Be Mine","Cayenne","My Bonnie","Ain't She Sweet","Cry for a Shadow","Searchin'","Three Cool Cats","The Sheik of Araby"]},
+{"title":"Anthology 2","year":"1996","collection":"SPECIAL","sideAEnd":6,"tracks":["Real Love","Yes It Is","I'm Down","You've Got to Hide Your Love Away","If You've Got Trouble","That Means a Lot","Yesterday","It's Only Love","I Feel Fine","Ticket to Ride","Help!","I'm Looking Through You"]},
+{"title":"Anthology 3","year":"1996","collection":"SPECIAL","sideAEnd":6,"tracks":["A Beginning","Happiness Is a Warm Gun","Helter Skelter","Mean Mr. Mustard","Polythene Pam","Glass Onion","Junk","Honey Pie","Martha My Dear","I'm So Tired","I Will","The Long and Winding Road"]},
+{"title":"Anthology 4","year":"2025","collection":"SPECIAL","sideAEnd":6,"tracks":["I Saw Her Standing There (Take 2)","Misery (Take 1)","There's a Place (Take 5)","From Me to You (Take 1)","Thank You Girl (Take 1)","One After 909 (Take 3)"]},
+{"title":"Past Masters","year":"1988","collection":"SPECIAL","sideAEnd":9,"tracks":["Love Me Do","From Me to You","Thank You Girl","She Loves You","I'll Get You","I Want to Hold Your Hand","This Boy","Komm, Gib Mir Deine Hand","Sie Liebt Dich","Long Tall Sally","I Call Your Name","Slow Down","Matchbox","I Feel Fine","She's a Woman","Bad Boy","Yes It Is","I'm Down"]},
+{"title":"Love","year":"2006","collection":"SPECIAL","sideAEnd":13,"tracks":["Because","Get Back","Glass Onion","Eleanor Rigby / Julia","I Am the Walrus","I Want to Hold Your Hand","Drive My Car / The Word / What You're Doing","Gnik Nus","Something","Being for the Benefit of Mr. Kite!","Help!","Blackbird / Yesterday","Strawberry Fields Forever"]},
+{"title":"The Beatles 1962–1966 (Red Album)","year":"1973","collection":"SPECIAL","sideAEnd":12,"tracks":["Love Me Do","Please Please Me","From Me to You","She Loves You","I Want to Hold Your Hand","All My Loving","Can't Buy Me Love","A Hard Day's Night","And I Love Her","Eight Days a Week","I Feel Fine","Ticket to Ride"]},
+{"title":"The Beatles 1967–1970 (Blue Album)","year":"1973","collection":"SPECIAL","sideAEnd":12,"tracks":["Strawberry Fields Forever","Penny Lane","Sgt. Pepper's Lonely Hearts Club Band","With a Little Help from My Friends","Lucy in the Sky with Diamonds","A Day in the Life","All You Need Is Love","I Am the Walrus","Hello, Goodbye","The Fool on the Hill","Magical Mystery Tour","Lady Madonna"]},
+{"title":"The Beatles' Christmas Records","year":"1970","collection":"SPECIAL","sideAEnd":3,"tracks":["The Beatles' Christmas Record","Another Beatles Christmas Record","The Beatles' Third Christmas Record","Pantomime: Everywhere It's Christmas","Christmas Time (Is Here Again)","The Beatles' 1968 Christmas Record","The Beatles' 1969 Christmas Record"]}
 ];
 const coverImages=[
-
 "https://sharklemez.hu/img/74396/0094638241614/500x500%2Cr/0094638241614.jpg?time=1722320619",
 "https://vinylbazar.com/img/thumbs/7c5240692ffcf1be5ee4c329b37a82c9-1240x.jpg",
 "https://vinylgoatstl.com/cdn/shop/files/1706309122830.jpg?v=1706310100&width=1445",
@@ -134,44 +156,10 @@ const coverImages=[
 "https://assets.catawiki.com/image/cw_ldp_l/plain/assets/catawiki/assets/2025/11/20/5/7/c/57cee7d7-fe72-4165-a62a-4496167977b9.jpg",
 "https://uk.rarevinyl.com/cdn/shop/files/the-beatles-revolver-1st-ex-uk-vinyl-lp-album-record-pcs7009-553860.jpg?v=1726209320",
 "https://dominicwinter.blob.core.windows.net/stock/133428-0-medium.jpg?v=63708730028113",
-"https://i.ebayimg.com/images/g/NA0AAOSwDRtnTPJc/s-l1200.jpg",
+"https://www.yokono.co.uk/collection/beatles/uk/guide/ep/sleeve/magical_sleeve.gif",
 "https://yourvinylshop.com/cdn/shop/files/vintage-vinyl-records-0926_f847fb9c-8a19-43fb-b6a7-13ef4673be7d_720x%402x.jpg?v=1696984806",
-"https://www.sweelee.co.id/cdn/shop/files/products_2FFLS-VINH-BD-0602577915123_2FFLS-VINH-BD-0602577915123_1696409160640_1200x1200.jpg?v=1721290411",,
-"https://aboutthebeatles.com/wp-content/uploads/twist-and-shout-ep.jpg",
-"https://aboutthebeatles.com/wp-content/uploads/beatles-hits-ep.jpg",
-"https://aboutthebeatles.com/wp-content/uploads/beatles-no-1-ep.jpg",
-"https://aboutthebeatles.com/wp-content/uploads/all-my-loving-ep.jpg",
-"https://aboutthebeatles.com/wp-content/uploads/long-tall-sally-ep.jpg",
-"https://aboutthebeatles.com/wp-content/uploads/extracts-from-the-film-a-hard-days-night-ep.jpg",
-"https://aboutthebeatles.com/wp-content/uploads/extracts-from-the-album-a-hard-days-night-ep.jpg",
-"https://aboutthebeatles.com/wp-content/uploads/beatles-for-sale-ep.jpg",
-"https://aboutthebeatles.com/wp-content/uploads/beatles-for-sale-no-2-ep.jpg",
-"https://aboutthebeatles.com/wp-content/uploads/the-beatles-million-sellers-ep.jpg",
-"https://aboutthebeatles.com/wp-content/uploads/yesterday-ep.jpg",
-"https://aboutthebeatles.com/wp-content/uploads/nowhere-man-ep.jpg",
-"https://aboutthebeatles.com/wp-content/uploads/magical-mystery-tour-ep.jpg",
-"https://files.ekmcdn.com/planetearthrec/images/the-beatles-i-want-to-hold-your-hand-vinyl-record-7-inch-parlophone-1963-88776-1-p.jpeg?h=1000&v=57BFD4C6-7EDB-481C-97DB-C888E036AC7A&w=1000",
-"https://files.ekmcdn.com/planetearthrec/images/the-beatles-i-want-to-hold-your-hand-vinyl-record-7-inch-parlophone-1963-88776-1-p.jpeg?h=1000&v=57BFD4C6-7EDB-481C-97DB-C888E036AC7A&w=1000",
-"https://files.ekmcdn.com/planetearthrec/images/the-beatles-i-want-to-hold-your-hand-vinyl-record-7-inch-parlophone-1963-88776-1-p.jpeg?h=1000&v=57BFD4C6-7EDB-481C-97DB-C888E036AC7A&w=1000",
-"https://files.ekmcdn.com/planetearthrec/images/the-beatles-i-want-to-hold-your-hand-vinyl-record-7-inch-parlophone-1963-88776-1-p.jpeg?h=1000&v=57BFD4C6-7EDB-481C-97DB-C888E036AC7A&w=1000",
-"https://files.ekmcdn.com/planetearthrec/images/the-beatles-i-want-to-hold-your-hand-vinyl-record-7-inch-parlophone-1963-88776-1-p.jpeg?h=1000&v=57BFD4C6-7EDB-481C-97DB-C888E036AC7A&w=1000",
-"https://files.ekmcdn.com/planetearthrec/images/the-beatles-i-want-to-hold-your-hand-vinyl-record-7-inch-parlophone-1963-88776-1-p.jpeg?h=1000&v=57BFD4C6-7EDB-481C-97DB-C888E036AC7A&w=1000",
-"https://files.ekmcdn.com/planetearthrec/images/the-beatles-i-want-to-hold-your-hand-vinyl-record-7-inch-parlophone-1963-88776-1-p.jpeg?h=1000&v=57BFD4C6-7EDB-481C-97DB-C888E036AC7A&w=1000",
-"https://files.ekmcdn.com/planetearthrec/images/the-beatles-i-want-to-hold-your-hand-vinyl-record-7-inch-parlophone-1963-88776-1-p.jpeg?h=1000&v=57BFD4C6-7EDB-481C-97DB-C888E036AC7A&w=1000",
-"https://files.ekmcdn.com/planetearthrec/images/the-beatles-i-want-to-hold-your-hand-vinyl-record-7-inch-parlophone-1963-88776-1-p.jpeg?h=1000&v=57BFD4C6-7EDB-481C-97DB-C888E036AC7A&w=1000",
-"https://files.ekmcdn.com/planetearthrec/images/the-beatles-i-want-to-hold-your-hand-vinyl-record-7-inch-parlophone-1963-88776-1-p.jpeg?h=1000&v=57BFD4C6-7EDB-481C-97DB-C888E036AC7A&w=1000",
-"https://files.ekmcdn.com/planetearthrec/images/the-beatles-i-want-to-hold-your-hand-vinyl-record-7-inch-parlophone-1963-88776-1-p.jpeg?h=1000&v=57BFD4C6-7EDB-481C-97DB-C888E036AC7A&w=1000",
-"https://files.ekmcdn.com/planetearthrec/images/the-beatles-i-want-to-hold-your-hand-vinyl-record-7-inch-parlophone-1963-88776-1-p.jpeg?h=1000&v=57BFD4C6-7EDB-481C-97DB-C888E036AC7A&w=1000",
-"https://files.ekmcdn.com/planetearthrec/images/the-beatles-i-want-to-hold-your-hand-vinyl-record-7-inch-parlophone-1963-88776-1-p.jpeg?h=1000&v=57BFD4C6-7EDB-481C-97DB-C888E036AC7A&w=1000",
-"https://files.ekmcdn.com/planetearthrec/images/the-beatles-i-want-to-hold-your-hand-vinyl-record-7-inch-parlophone-1963-88776-1-p.jpeg?h=1000&v=57BFD4C6-7EDB-481C-97DB-C888E036AC7A&w=1000",
-"https://files.ekmcdn.com/planetearthrec/images/the-beatles-i-want-to-hold-your-hand-vinyl-record-7-inch-parlophone-1963-88776-1-p.jpeg?h=1000&v=57BFD4C6-7EDB-481C-97DB-C888E036AC7A&w=1000",
-"https://files.ekmcdn.com/planetearthrec/images/the-beatles-i-want-to-hold-your-hand-vinyl-record-7-inch-parlophone-1963-88776-1-p.jpeg?h=1000&v=57BFD4C6-7EDB-481C-97DB-C888E036AC7A&w=1000",
-"https://files.ekmcdn.com/planetearthrec/images/the-beatles-i-want-to-hold-your-hand-vinyl-record-7-inch-parlophone-1963-88776-1-p.jpeg?h=1000&v=57BFD4C6-7EDB-481C-97DB-C888E036AC7A&w=1000",
-"https://files.ekmcdn.com/planetearthrec/images/the-beatles-i-want-to-hold-your-hand-vinyl-record-7-inch-parlophone-1963-88776-1-p.jpeg?h=1000&v=57BFD4C6-7EDB-481C-97DB-C888E036AC7A&w=1000",
-"https://files.ekmcdn.com/planetearthrec/images/the-beatles-i-want-to-hold-your-hand-vinyl-record-7-inch-parlophone-1963-88776-1-p.jpeg?h=1000&v=57BFD4C6-7EDB-481C-97DB-C888E036AC7A&w=1000",
-"https://files.ekmcdn.com/planetearthrec/images/the-beatles-i-want-to-hold-your-hand-vinyl-record-7-inch-parlophone-1963-88776-1-p.jpeg?h=1000&v=57BFD4C6-7EDB-481C-97DB-C888E036AC7A&w=1000",
-"https://files.ekmcdn.com/planetearthrec/images/the-beatles-i-want-to-hold-your-hand-vinyl-record-7-inch-parlophone-1963-88776-1-p.jpeg?h=1000&v=57BFD4C6-7EDB-481C-97DB-C888E036AC7A&w=1000",
-"https://files.ekmcdn.com/planetearthrec/images/the-beatles-i-want-to-hold-your-hand-vinyl-record-7-inch-parlophone-1963-88776-1-p.jpeg?h=1000&v=57BFD4C6-7EDB-481C-97DB-C888E036AC7A&w=1000"
+"https://www.sweelee.co.id/cdn/shop/files/products_2FFLS-VINH-BD-0602577915123_2FFLS-VINH-BD-0602577915123_1696409160640_1200x1200.jpg?v=1721290411",
+"https://aboutthebeatles.com/wp-content/uploads/twist-and-shout-ep.jpg"
 ];
 const $=id=>document.getElementById(id);
 let current=-1,side="A",currentTrack=-1,db=null,activeObjectUrl=null,currentBlob=null,reverseMode=false,audioContext=null,reverseSource=null,reverseGain=null,reverseBuffer=null,reverseElapsed=0,reverseStartedAt=0,reverseDuration=0,reverseFrame=0;
@@ -203,15 +191,28 @@ function removeAccidentalImports(){
   });
  };
 }
+let activeCollection="ALBUM";
+const collectionTabs=[["ALBUM","Albums"],["EP","EPs"],["SINGLE","Singles"],["AMERICAN","American Albums"],["PRE","Pre-Beatles"],["POST","Post-Beatles"],["SPECIAL","Special Releases"]];
+function renderCollectionTabs(){
+ const tabs=$("collectionTabs");tabs.innerHTML="";
+ collectionTabs.forEach(([key,label])=>{const b=document.createElement("button");b.textContent=label;b.className=activeCollection===key?"active":"";b.onclick=()=>{activeCollection=key;renderCollectionTabs();renderShelf()};tabs.append(b)});
+}
 function renderShelf(){
  const shelf=$("shelf");shelf.innerHTML="";
- albums.map((a,i)=>({a,i})).sort((x,y)=>{const rank=v=>v.type==="EP"?1:v.type==="SINGLE"?2:0;return rank(x.a)-rank(y.a)||Number(x.a.year)-Number(y.a.year)||x.i-y.i}).forEach(({a,i})=>{
+ albums.map((a,i)=>({a,i})).filter(({a})=>{
+  const category=a.collection||(a.type==="EP"?"EP":a.type==="SINGLE"?"SINGLE":"ALBUM");
+  return category===activeCollection;
+ }).sort((x,y)=>Number(x.a.year)-Number(y.a.year)||x.i-y.i).forEach(({a,i})=>{
   const el=document.createElement("div");el.className="album"+(i===current?" active":"");
-  const cover=document.createElement("div");cover.className="cover";const img=document.createElement("img");img.src=coverImages[i]||"";img.alt=a.title+" record sleeve";img.loading="lazy";img.onerror=()=>{img.remove();cover.textContent=a.title;cover.style.padding="8px";cover.style.display="grid";cover.style.placeItems="center";cover.style.color="#e9dfc9";cover.style.fontSize="14px"};cover.append(img);
-  const small=document.createElement("small");small.textContent=(a.type?a.type+" • ":"")+a.year;
+  const cover=document.createElement("div");cover.className="cover";
+  const url=coverImages[i];
+  if(url){const img=document.createElement("img");img.src=url;img.alt=a.title+" record sleeve";img.loading="lazy";img.onerror=()=>{img.remove();cover.classList.add("generated");const inner=document.createElement("div");const title=document.createElement("div");title.className="sleeve-title";title.textContent=a.title;const sub=document.createElement("div");sub.className="sleeve-sub";sub.textContent=a.year+" • THE BEATLES";inner.append(title,sub);cover.append(inner)};cover.append(img)}
+  else{cover.classList.add("generated");const inner=document.createElement("div"),title=document.createElement("div"),sub=document.createElement("div");title.className="sleeve-title";title.textContent=a.title;sub.className="sleeve-sub";sub.textContent=a.year+" • "+(a.collection==="POST"?"SOLO RELEASE":"THE BEATLES");inner.append(title,sub);cover.append(inner)}
+  const small=document.createElement("small");small.textContent=(a.collection==="AMERICAN"?"US ALBUM":a.collection==="PRE"?"PRE-BEATLES":a.collection==="POST"?"SOLO • "+a.title.split(" — ")[0]:a.collection==="SPECIAL"?"SPECIAL RELEASE":a.type||"ALBUM")+" • "+a.year;
   el.append(cover,small);el.onclick=()=>selectAlbum(i);shelf.append(el);
  });
 }
+
 function updateRecordLabel(){
  const a=albums[current];if(!a)return;
  const label=$("label"),apple=[9,10,11].includes(current);
@@ -222,7 +223,7 @@ function selectAlbum(i){
  stopAudio();resetPlatter();current=i;side="A";currentTrack=-1;
  const a=albums[i];$("albumName").textContent=a.title;updateRecordLabel();
  $("trackName").textContent=a.year+" • SIDE A";$("flip").textContent=flipLabel(a);
- renderTracks();renderShelf();
+ renderTracks();renderCollectionTabs();renderShelf();
 }
 function renderTracks(){
  const box=$("tracks");box.innerHTML="";
