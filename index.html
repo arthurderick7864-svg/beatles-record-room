@@ -87,7 +87,7 @@ const albums=[
 {title:"Revolver",year:"1966",sideAEnd:7,tracks:["Taxman","Eleanor Rigby","I'm Only Sleeping","Love You To","Here, There and Everywhere","Yellow Submarine","She Said She Said","Good Day Sunshine","And Your Bird Can Sing","For No One","Doctor Robert","I Want to Tell You","Got to Get You into My Life","Tomorrow Never Knows"]},
 {title:"Sgt. Pepper's",year:"1967",sideAEnd:7,tracks:["Sgt. Pepper's Lonely Hearts Club Band","With a Little Help from My Friends","Lucy in the Sky with Diamonds","Getting Better","Fixing a Hole","She's Leaving Home","Being for the Benefit of Mr. Kite!","Within You Without You","When I'm Sixty-Four","Lovely Rita","Good Morning Good Morning","Sgt. Pepper's (Reprise)","A Day in the Life"]},
 {title:"Magical Mystery Tour",year:"1967",sideAEnd:6,tracks:["Magical Mystery Tour","The Fool on the Hill","Flying","Blue Jay Way","Your Mother Should Know","I Am the Walrus","Hello, Goodbye","Strawberry Fields Forever","Penny Lane","Baby You're a Rich Man","All You Need Is Love"]},
-{title:"The Beatles (White Album)",year:"1968",sideAEnd:15,tracks:["Back in the U.S.S.R.","Dear Prudence","Glass Onion","Ob-La-Di, Ob-La-Da","Wild Honey Pie","The Continuing Story of Bungalow Bill","While My Guitar Gently Weeps","Happiness Is a Warm Gun","Martha My Dear","I'm So Tired","Blackbird","Piggies","Rocky Raccoon","Don't Pass Me By","Why Don't We Do It in the Road?","I Will","Julia","Birthday","Yer Blues","Mother Nature's Son","Everybody's Got Something to Hide Except Me and My Monkey","Sexy Sadie","Helter Skelter","Long, Long, Long","Revolution 1","Honey Pie","Savoy Truffle","Cry Baby Cry","Revolution 9","Good Night"]},
+{title:"The Beatles (White Album)",year:"1968",sideAEnd:7,sideEnds:[7,15,22,30],tracks:["Back in the U.S.S.R.","Dear Prudence","Glass Onion","Ob-La-Di, Ob-La-Da","Wild Honey Pie","The Continuing Story of Bungalow Bill","While My Guitar Gently Weeps","Happiness Is a Warm Gun","Martha My Dear","I'm So Tired","Blackbird","Piggies","Rocky Raccoon","Don't Pass Me By","Why Don't We Do It in the Road?","I Will","Julia","Birthday","Yer Blues","Mother Nature's Son","Everybody's Got Something to Hide Except Me and My Monkey","Sexy Sadie","Helter Skelter","Long, Long, Long","Revolution 1","Honey Pie","Savoy Truffle","Cry Baby Cry","Revolution 9","Good Night"]},
 {title:"Abbey Road",year:"1969",sideAEnd:6,tracks:["Come Together","Something","Maxwell's Silver Hammer","Oh! Darling","Octopus's Garden","I Want You (She's So Heavy)","Here Comes the Sun","Because","You Never Give Me Your Money","Sun King","Mean Mr. Mustard","Polythene Pam","She Came in Through the Bathroom Window","Golden Slumbers","Carry That Weight","The End","Her Majesty"]},
 {title:"Let It Be",year:"1970",sideAEnd:6,tracks:["Two of Us","Dig a Pony","Across the Universe","I Me Mine","Dig It","Let It Be","Maggie Mae","I've Got a Feeling","One After 909","The Long and Winding Road","For You Blue","Get Back"]}
 ];
@@ -116,8 +116,13 @@ request.onupgradeneeded=e=>{
 };
 request.onsuccess=e=>{db=e.target.result;removeAccidentalImports();renderShelf();if(current>=0)renderTracks()};
 request.onerror=()=>{$("trackName").textContent="Browser storage unavailable; audio may not persist."};
-function sideStart(a){return side==="A"?0:a.sideAEnd}
-function sideEnd(a){return side==="A"?a.sideAEnd:a.tracks.length}
+function sideBounds(a){if(a.sideEnds){const n=["A","B","C","D"].indexOf(side);return [n===0?0:a.sideEnds[n-1],a.sideEnds[n]]}return side==="A"?[0,a.sideAEnd]:[a.sideAEnd,a.tracks.length]}
+function sideStart(a){return sideBounds(a)[0]}
+function sideEnd(a){return sideBounds(a)[1]}
+function sideNames(a){return a.sideEnds?["A","B","C","D"]:["A","B"]}
+function flipLabel(a){const names=sideNames(a),next=names[(names.indexOf(side)+1)%names.length];return "FLIP TO SIDE "+next}
+function sideBoundsFor(a,name){if(a.sideEnds){const n=["A","B","C","D"].indexOf(name);return [n===0?0:a.sideEnds[n-1],a.sideEnds[n]]}return name==="A"?[0,a.sideAEnd]:[a.sideAEnd,a.tracks.length]}
+function sideForTrack(a,index){return sideNames(a).find(name=>{const bounds=sideBoundsFor(a,name);return index>=bounds[0]&&index<bounds[1]})||"A"}
 function visibleTracks(){const a=albums[current];return a?a.tracks.slice(sideStart(a),sideEnd(a)):[]}
 function audioKey(albumIndex,trackIndex){return albumIndex+"|"+trackIndex}
 function removeAccidentalImports(){
@@ -143,12 +148,12 @@ function updateRecordLabel(){
  const a=albums[current];if(!a)return;
  const label=$("label"),apple=[9,10,11].includes(current);
  label.className="label"+(apple?" apple":"");
- label.innerHTML="<span class=\"label-brand\">"+(apple?"APPLE RECORDS":"PARLOPHONE")+"</span><span class=\"label-band\">THE BEATLES</span><span class=\"label-album\">"+a.title.toUpperCase()+"</span><span class=\"label-side\">SIDE "+side+" • 33⅓ RPM</span><span class=\"label-micro\">STEREO • LONG PLAY</span>";
+ label.innerHTML="<span class=\"label-brand\">"+(apple?"APPLE RECORDS":"PARLOPHONE")+"</span><span class=\"label-band\">THE BEATLES</span><span class=\"label-album\">"+a.title.toUpperCase()+"</span><span class=\"label-side\">"+(a.sideEnds?"DISC "+(["A","B","C","D"].indexOf(side)<2?1:2)+" • ":"")+"SIDE "+side+" • 33⅓ RPM</span><span class=\"label-micro\">STEREO • LONG PLAY</span>";
 }
 function selectAlbum(i){
  stopAudio();resetPlatter();current=i;side="A";currentTrack=-1;
  const a=albums[i];$("albumName").textContent=a.title;updateRecordLabel();
- $("trackName").textContent=a.year+" • SIDE A";$("flip").textContent="FLIP TO SIDE B";
+ $("trackName").textContent=a.year+" • SIDE A";$("flip").textContent=flipLabel(a);
  renderTracks();renderShelf();
 }
 function renderTracks(){
@@ -236,8 +241,8 @@ function playTrack(index){
  if(current<0||index<0||index>=albums[current].tracks.length)return;
  stopPlayback();currentTrack=index;currentBlob=null;reverseBuffer=null;
  const a=albums[current],track=a.tracks[index];
- side=index<a.sideAEnd?"A":"B";updateRecordLabel();updateTonearm(0);
- $("flip").textContent=side==="A"?"FLIP TO SIDE B":"FLIP TO SIDE A";
+ side=sideForTrack(a,index);updateRecordLabel();updateTonearm(0);
+ $("flip").textContent=flipLabel(a);
  $("trackName").textContent="SIDE "+side+" • "+track;renderTracks();
  if(!db){stopAudio();return}
  const req=db.transaction("trackAudio","readonly").objectStore("trackAudio").get(audioKey(current,index));
@@ -275,8 +280,8 @@ $("volume").oninput=e=>setVolume(e.target.value);
 $("reverse").onclick=()=>{reverseMode=!reverseMode;$("reverse").textContent=reverseMode?"↶ REVERSE: ON":"↶ REVERSE: OFF";if(currentBlob){stopPlayback();playCurrent()}};
 $("flip").onclick=()=>{
  if(current<0){selectAlbum(0);return}
- stopAudio();resetPlatter();side=side==="A"?"B":"A";currentTrack=-1;updateRecordLabel();
- $("flip").textContent=side==="A"?"FLIP TO SIDE B":"FLIP TO SIDE A";
+ stopAudio();resetPlatter();const names=sideNames(albums[current]);side=names[(names.indexOf(side)+1)%names.length];currentTrack=-1;updateRecordLabel();
+ $("flip").textContent=flipLabel(albums[current]);
  $("trackName").textContent=albums[current].title+" • SIDE "+side;renderTracks();
 };
 $("audio").onended=()=>{
