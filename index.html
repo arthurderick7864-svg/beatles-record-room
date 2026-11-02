@@ -132,8 +132,16 @@ function renderTracks(){
   const status=document.createElement("small");status.style.marginLeft="8px";
   const attach=document.createElement("button");attach.textContent="＋ AUDIO";attach.style.float="right";attach.style.padding="5px 8px";
   attach.onclick=e=>{e.stopPropagation();currentTrack=index;$("audioFiles").dataset.trackIndex=String(index);$("audioFiles").click()};
-  if(db){const check=db.transaction("trackAudio","readonly").objectStore("trackAudio").get(audioKey(current,index));check.onsuccess=()=>{if(check.result)status.textContent=" • AUDIO SAVED"}}
   row.append(name,status,attach);row.onclick=()=>playTrack(index);box.append(row);
+  if(db){
+   const check=db.transaction("trackAudio","readonly").objectStore("trackAudio").get(audioKey(current,index));
+   check.onsuccess=()=>{
+    if(check.result){
+     status.textContent=" • SAVED";
+     attach.remove();
+    }
+   };
+  }
  });
 }
 function playTrack(index){
