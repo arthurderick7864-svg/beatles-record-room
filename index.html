@@ -114,7 +114,7 @@ request.onupgradeneeded=e=>{
  if(!d.objectStoreNames.contains("songs"))d.createObjectStore("songs",{keyPath:"id",autoIncrement:true});
  if(!d.objectStoreNames.contains("trackAudio"))d.createObjectStore("trackAudio",{keyPath:"key"});
 };
-request.onsuccess=e=>{db=e.target.result;removeAccidentalImports();renderShelf();if(current>=0)renderTracks()};
+request.onsuccess=e=>{db=e.target.result;removeAccidentalImports();if(!localStorage.getItem("beatlesRoomFixedIWantToBeYourManAudio")){const tx=db.transaction("trackAudio","readwrite");tx.objectStore("trackAudio").delete("1|10");tx.oncomplete=()=>{localStorage.setItem("beatlesRoomFixedIWantToBeYourManAudio","1");renderShelf();if(current>=0)renderTracks()};tx.onerror=()=>{renderShelf();if(current>=0)renderTracks()}}else{renderShelf();if(current>=0)renderTracks()}};
 request.onerror=()=>{$("trackName").textContent="Browser storage unavailable; audio may not persist."};
 function sideBounds(a){if(a.sideEnds){const n=["A","B","C","D"].indexOf(side);return [n===0?0:a.sideEnds[n-1],a.sideEnds[n]]}return side==="A"?[0,a.sideAEnd]:[a.sideAEnd,a.tracks.length]}
 function sideStart(a){return sideBounds(a)[0]}
