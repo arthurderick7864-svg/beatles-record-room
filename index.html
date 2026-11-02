@@ -19,9 +19,9 @@ header{text-align:center;padding:25px 12px 12px}header h1{font-weight:400;letter
 .deck{background:linear-gradient(145deg,#d3c6a9,#8f8065);color:#211e19;border:8px solid #34271d;border-radius:5px;padding:15px;box-shadow:inset 0 0 0 2px #f2e7cd}
 .deck h2{font-weight:400;text-align:center;letter-spacing:3px;font-size:17px;margin:0 0 12px}
 .turntable{height:290px;background:linear-gradient(145deg,#282725,#0e0e0d);border:5px solid #6d5b42;border-radius:4px;position:relative;display:grid;place-items:center;overflow:hidden}
-.platter{width:240px;height:240px;border-radius:50%;background:repeating-radial-gradient(circle,#171717 0 2px,#292929 3px 4px,#111 5px 6px);border:5px solid #555;display:grid;place-items:center;box-shadow:0 0 15px #000}
+.platter{width:240px;height:240px;border-radius:50%;position:relative;background:radial-gradient(circle at 34% 27%,#ffffff18 0 1%,transparent 34%),repeating-radial-gradient(circle at center,#101010 0 1px,#252525 1.5px 2px,#111 2.5px 3.5px,#202020 4px 4.5px),radial-gradient(circle,#303030,#090909 72%);border:5px solid #454545;display:grid;place-items:center;box-shadow:0 0 0 2px #171717,0 0 18px #000,inset 0 0 16px #000}.platter:before{content:"";position:absolute;inset:8px;border-radius:50%;border:1px solid #ffffff12;box-shadow:0 0 0 2px #0008,0 0 0 4px #ffffff08,0 0 0 8px #0005;pointer-events:none}.platter:after{content:"";position:absolute;inset:0;border-radius:50%;background:conic-gradient(from 20deg,transparent 0 12%,#ffffff0a 15%,transparent 20% 48%,#ffffff0b 52%,transparent 58% 100%);pointer-events:none}.platter.spinning{animation:spin 2s linear infinite}@keyframes spin{to{transform:rotate(360deg)}}
 .platter.spinning{animation:spin 2s linear infinite}@keyframes spin{to{transform:rotate(360deg)}}
-.label{width:76px;height:76px;border-radius:50%;background:#a64d3b;border:3px solid #d4b77c;display:grid;place-items:center;color:#f1dfbd;text-align:center;font:10px Arial;letter-spacing:1px}
+.label{width:82px;height:82px;border-radius:50%;position:relative;z-index:1;background:radial-gradient(circle,#b9a66f 0 2px,#b9a66f 2.5px,#a64d3b 3px 100%);border:2px solid #d9c58f;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;color:#f5e9c9;text-align:center;font: bold 8px Arial;letter-spacing:1px;box-shadow:0 1px 5px #000,inset 0 0 0 2px #ffffff22}.label.apple{background:radial-gradient(circle,#d8c78e 0 2px,#d8c78e 2.5px,#557a43 3px 100%);color:#f4edcf;border-color:#d9d0a4}.label .label-brand{font-size:7px;letter-spacing:1.3px;border-bottom:1px solid #f5e9c966;padding-bottom:3px;width:75%;}.label .label-band{font: bold 10px Georgia;letter-spacing:0}.label .label-side{font-size:6px;letter-spacing:1px}
 .spindle{position:absolute;width:7px;height:7px;background:#ddd;border-radius:50%}
 .arm{position:absolute;width:120px;height:8px;background:linear-gradient(#d8d1c0,#756f63);right:28px;top:40px;transform-origin:105px 4px;transform:rotate(28deg);transition:transform 1s;z-index:2;border-radius:5px;box-shadow:0 2px 4px #000}
 .arm:before{content:"";position:absolute;right:0;top:-9px;width:25px;height:24px;background:#b9b2a3;border:2px solid #5c574f;border-radius:4px}
@@ -139,9 +139,15 @@ function renderShelf(){
   el.append(cover,small);el.onclick=()=>selectAlbum(i);shelf.append(el);
  });
 }
+function updateRecordLabel(){
+ const a=albums[current];if(!a)return;
+ const label=$("label"),apple=[9,10,11].includes(current);
+ label.className="label"+(apple?" apple":"");
+ label.innerHTML="<span class=\"label-brand\">"+(apple?"APPLE RECORDS":"PARLOPHONE")+"</span><span class=\"label-band\">THE BEATLES</span><span class=\"label-side\">SIDE "+side+" • 33⅓ RPM</span>";
+}
 function selectAlbum(i){
  stopAudio();current=i;side="A";currentTrack=-1;
- const a=albums[i];$("albumName").textContent=a.title;$("label").textContent=a.title.toUpperCase();
+ const a=albums[i];$("albumName").textContent=a.title;updateRecordLabel();
  $("trackName").textContent=a.year+" • SIDE A";$("flip").textContent="FLIP TO SIDE B";
  renderTracks();renderShelf();
 }
@@ -215,7 +221,7 @@ function playTrack(index){
  if(current<0||index<0||index>=albums[current].tracks.length)return;
  stopPlayback();currentTrack=index;currentBlob=null;reverseBuffer=null;
  const a=albums[current],track=a.tracks[index];
- side=index<a.sideAEnd?"A":"B";
+ side=index<a.sideAEnd?"A":"B";updateRecordLabel();
  $("flip").textContent=side==="A"?"FLIP TO SIDE B":"FLIP TO SIDE A";
  $("trackName").textContent="SIDE "+side+" • "+track;renderTracks();
  if(!db){stopAudio();return}
@@ -242,7 +248,7 @@ $("volume").oninput=e=>setVolume(e.target.value);
 $("reverse").onclick=()=>{reverseMode=!reverseMode;$("reverse").textContent=reverseMode?"↶ REVERSE: ON":"↶ REVERSE: OFF";if(currentBlob){stopPlayback();playCurrent()}};
 $("flip").onclick=()=>{
  if(current<0){selectAlbum(0);return}
- stopAudio();side=side==="A"?"B":"A";currentTrack=-1;
+ stopAudio();side=side==="A"?"B":"A";currentTrack=-1;updateRecordLabel();
  $("flip").textContent=side==="A"?"FLIP TO SIDE B":"FLIP TO SIDE A";
  $("trackName").textContent=albums[current].title+" • SIDE "+side;renderTracks();
 };
