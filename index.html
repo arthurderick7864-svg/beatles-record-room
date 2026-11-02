@@ -146,7 +146,7 @@ function updateRecordLabel(){
  label.innerHTML="<span class=\"label-brand\">"+(apple?"APPLE RECORDS":"PARLOPHONE")+"</span><span class=\"label-band\">THE BEATLES</span><span class=\"label-side\">SIDE "+side+" • 33⅓ RPM</span>";
 }
 function selectAlbum(i){
- stopAudio();current=i;side="A";currentTrack=-1;
+ stopAudio();resetPlatter();current=i;side="A";currentTrack=-1;
  const a=albums[i];$("albumName").textContent=a.title;updateRecordLabel();
  $("trackName").textContent=a.year+" • SIDE A";$("flip").textContent="FLIP TO SIDE B";
  renderTracks();renderShelf();
@@ -176,9 +176,10 @@ function renderTracks(){
 function stopReverse(){
  if(reverseSource){try{reverseSource.stop()}catch(e){}reverseSource.disconnect();reverseSource=null}
 }
+function pausePlatter(){ $("platter").style.animationPlayState="paused"; }
+function resetPlatter(){ const p=$("platter");p.classList.remove("spinning");p.style.animationPlayState="running";p.style.transform="rotate(0deg)"; }
 function stopPlayback(){
- $("audio").pause();stopReverse();
- $("platter").classList.remove("spinning");updateTonearm(0);
+ $("audio").pause();stopReverse();pausePlatter();updateTonearm(0);
 }
 function setVolume(value){
  const v=Math.max(0,Math.min(1,Number(value)));
@@ -211,7 +212,7 @@ async function playReversed(){
   reverseSource.start();startSpin();
  }catch(err){$("trackName").textContent="Could not reverse this audio format • "+err.message;reverseMode=false;$("reverse").textContent="↶ REVERSE: OFF"}
 }
-function stopSpinOnly(){$("platter").classList.remove("spinning");$("arm").classList.remove("playing")}
+function stopSpinOnly(){pausePlatter();$("arm").classList.remove("playing")}
 function playCurrent(){
  if(currentTrack<0)return;
  updateTonearm(0);
@@ -247,7 +248,7 @@ function updateTonearm(progress=0){
  const easedPosition=0.7*position+0.3*position*position;
  arm.style.transform="rotate("+(-54+easedPosition*24)+"deg)";
 }
-function startSpin(){$("platter").classList.add("spinning");updateTonearm($("audio").duration?$("audio").currentTime/$("audio").duration:0)}
+function startSpin(){const p=$("platter");p.classList.add("spinning");p.style.animationPlayState="running";updateTonearm($("audio").duration?$("audio").currentTime/$("audio").duration:0)}
 function stopAudio(){stopPlayback()}
 $("audio").ontimeupdate=()=>{if(!reverseMode&&currentTrack>=0&&$("audio").duration)updateTonearm($("audio").currentTime/$("audio").duration)};
 $("play").onclick=()=>{
@@ -255,12 +256,12 @@ $("play").onclick=()=>{
  if(currentTrack<0)playTrack(sideStart(albums[current]));
  else playCurrent();
 };
-$("pause").onclick=()=>{ $("audio").pause();stopReverse();$("platter").classList.remove("spinning");updateTonearm($("audio").duration?$("audio").currentTime/$("audio").duration:0)};
+$("pause").onclick=()=>{ $("audio").pause();stopReverse();pausePlatter();updateTonearm($("audio").duration?$("audio").currentTime/$("audio").duration:0)};
 $("volume").oninput=e=>setVolume(e.target.value);
 $("reverse").onclick=()=>{reverseMode=!reverseMode;$("reverse").textContent=reverseMode?"↶ REVERSE: ON":"↶ REVERSE: OFF";if(currentBlob){stopPlayback();playCurrent()}};
 $("flip").onclick=()=>{
  if(current<0){selectAlbum(0);return}
- stopAudio();side=side==="A"?"B":"A";currentTrack=-1;updateRecordLabel();
+ stopAudio();resetPlatter();side=side==="A"?"B":"A";currentTrack=-1;updateRecordLabel();
  $("flip").textContent=side==="A"?"FLIP TO SIDE B":"FLIP TO SIDE A";
  $("trackName").textContent=albums[current].title+" • SIDE "+side;renderTracks();
 };
@@ -268,7 +269,7 @@ $("audio").onended=()=>{
  if(reverseMode)return;
  if(current<0)return;
  const a=albums[current],next=currentTrack+1;
- if(next<sideEnd(a))playTrack(next);else{ $("platter").classList.remove("spinning"); stopReverse(); $("audio").pause(); updateTonearm(1); }
+ if(next<sideEnd(a))playTrack(next);else{ pausePlatter(); stopReverse(); $("audio").pause(); updateTonearm(1); }
 };
 $("audioFiles").onchange=e=>{
  const file=e.target.files[0],index=Number(e.target.dataset.trackIndex);e.target.value="";
