@@ -19,8 +19,8 @@ header{text-align:center;padding:25px 12px 12px}header h1{font-weight:400;letter
 .deck{background:linear-gradient(145deg,#d3c6a9,#8f8065);color:#211e19;border:8px solid #34271d;border-radius:5px;padding:15px;box-shadow:inset 0 0 0 2px #f2e7cd}
 .deck h2{font-weight:400;text-align:center;letter-spacing:3px;font-size:17px;margin:0 0 12px}
 .turntable{height:290px;background:linear-gradient(145deg,#282725,#0e0e0d);border:5px solid #6d5b42;border-radius:4px;position:relative;display:grid;place-items:center;overflow:hidden}
-.platter{width:240px;height:240px;border-radius:50%;position:relative;background:radial-gradient(circle at 34% 27%,#ffffff18 0 1%,transparent 34%),repeating-radial-gradient(circle at center,#101010 0 1px,#252525 1.5px 2px,#111 2.5px 3.5px,#202020 4px 4.5px),radial-gradient(circle,#303030,#090909 72%);border:5px solid #454545;display:grid;place-items:center;box-shadow:0 0 0 2px #171717,0 0 18px #000,inset 0 0 16px #000}.platter:before{content:"";position:absolute;inset:8px;border-radius:50%;border:1px solid #ffffff12;box-shadow:0 0 0 2px #0008,0 0 0 4px #ffffff08,0 0 0 8px #0005;pointer-events:none}.platter:after{content:"";position:absolute;inset:0;border-radius:50%;background:conic-gradient(from 20deg,transparent 0 12%,#ffffff0a 15%,transparent 20% 48%,#ffffff0b 52%,transparent 58% 100%);pointer-events:none}.platter.spinning{animation:spin 2s linear infinite}.platter.spinning.paused{animation-play-state:paused!important}@keyframes spin{to{transform:rotate(360deg)}}
-.platter.spinning{animation:spin 2s linear infinite}.platter.spinning.paused{animation-play-state:paused!important}@keyframes spin{to{transform:rotate(360deg)}}
+.platter{width:240px;height:240px;border-radius:50%;position:relative;background:radial-gradient(circle at 34% 27%,#ffffff18 0 1%,transparent 34%),repeating-radial-gradient(circle at center,#101010 0 1px,#252525 1.5px 2px,#111 2.5px 3.5px,#202020 4px 4.5px),radial-gradient(circle,#303030,#090909 72%);border:5px solid #454545;display:grid;place-items:center;box-shadow:0 0 0 2px #171717,0 0 18px #000,inset 0 0 16px #000}.platter:before{content:"";position:absolute;inset:8px;border-radius:50%;border:1px solid #ffffff12;box-shadow:0 0 0 2px #0008,0 0 0 4px #ffffff08,0 0 0 8px #0005;pointer-events:none}.platter:after{content:"";position:absolute;inset:0;border-radius:50%;background:conic-gradient(from 20deg,transparent 0 12%,#ffffff0a 15%,transparent 20% 48%,#ffffff0b 52%,transparent 58% 100%);pointer-events:none}.platter.spinning{animation:spin 2s linear infinite}.platter.spinning.reverse-spin{animation-direction:reverse}.platter.spinning.paused{animation-play-state:paused!important}@keyframes spin{to{transform:rotate(360deg)}}
+.platter.spinning{animation:spin 2s linear infinite}.platter.spinning.reverse-spin{animation-direction:reverse}.platter.spinning.paused{animation-play-state:paused!important}@keyframes spin{to{transform:rotate(360deg)}}
 .label{width:82px;height:82px;border-radius:50%;position:relative;z-index:1;overflow:hidden;background:radial-gradient(circle at center,#b9a66f 0 2px,#a64d3b 2.5px 100%);border:2px solid #d9c58f;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;color:#f5e9c9;text-align:center;font:bold 7px Arial;letter-spacing:.7px;box-shadow:0 1px 5px #000,inset 0 0 0 2px #ffffff22}.label:before{content:"";position:absolute;inset:4px;border:1px solid #f5e9c966;border-radius:50%;pointer-events:none}.label:after{content:"";position:absolute;inset:9px;border:1px dotted #f5e9c955;border-radius:50%;pointer-events:none}.label.apple{background:radial-gradient(circle at center,#d8c78e 0 2px,#557a43 2.5px 100%);color:#f4edcf;border-color:#d9d0a4}.label .label-brand{font-size:6px;letter-spacing:1.1px;border-bottom:1px solid #f5e9c966;padding-bottom:2px;width:72%;z-index:1}.label .label-band{font:bold 10px Georgia;letter-spacing:0;z-index:1}.label .label-album{font:italic 5px Georgia;letter-spacing:.2px;max-width:68px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;z-index:1}.label .label-side{font-size:5px;letter-spacing:.6px;z-index:1}.label .label-micro{font:4px Arial;letter-spacing:.5px;z-index:1;opacity:.9}
 .spindle{position:absolute;width:7px;height:7px;background:#ddd;border-radius:50%}
 .arm{position:absolute;width:205px;height:13px;right:0px;top:85px;transform-origin:188px 6px;transform:rotate(-54deg);transition:transform .25s linear;z-index:2;border-radius:7px 3px 3px 7px;background:linear-gradient(180deg,#f0ecdf 0%,#bcb6a8 28%,#69645a 72%,#d8d1c1 100%);clip-path:polygon(0 58%,68% 58%,82% 0,100% 0,100% 55%,87% 55%,75% 100%,0 100%);filter:drop-shadow(0 2px 2px #0009)}
@@ -106,7 +106,7 @@ const coverImages=[
 "https://yourvinylshop.com/cdn/shop/files/vintage-vinyl-records-0230_df9197e9-0a49-4358-b294-747685956035.jpg?v=1744379515"
 ];
 const $=id=>document.getElementById(id);
-let current=-1,side="A",currentTrack=-1,db=null,activeObjectUrl=null,currentBlob=null,reverseMode=false,audioContext=null,reverseSource=null,reverseGain=null,reverseBuffer=null;
+let current=-1,side="A",currentTrack=-1,db=null,activeObjectUrl=null,currentBlob=null,reverseMode=false,audioContext=null,reverseSource=null,reverseGain=null,reverseBuffer=null,reverseElapsed=0,reverseStartedAt=0,reverseDuration=0,reverseFrame=0;
 const DB_NAME="BeatlesRecordRoomLibrary";
 const request=indexedDB.open(DB_NAME,2);
 request.onupgradeneeded=e=>{
@@ -173,13 +173,14 @@ function renderTracks(){
   }
  });
 }
-function stopReverse(){
- if(reverseSource){try{reverseSource.stop()}catch(e){}reverseSource.disconnect();reverseSource=null}
+function stopReverse(preservePosition=false){
+ if(reverseFrame){cancelAnimationFrame(reverseFrame);reverseFrame=0}
+ if(reverseSource){if(preservePosition&&audioContext)reverseElapsed=Math.min(reverseDuration,reverseElapsed+audioContext.currentTime-reverseStartedAt);try{reverseSource.stop()}catch(e){}reverseSource.disconnect();reverseSource=null}
 }
 function pausePlatter(){ $("platter").classList.add("paused"); }
-function resetPlatter(){ const p=$("platter");p.classList.remove("spinning","paused");p.style.animationPlayState="";p.style.transform="rotate(0deg)"; }
+function resetPlatter(){ const p=$("platter");p.classList.remove("spinning","paused","reverse-spin");p.style.animationPlayState="";p.style.transform="rotate(0deg)"; }
 function stopPlayback(){
- $("audio").pause();stopReverse();pausePlatter();updateTonearm(0);
+ $("audio").pause();stopReverse();reverseElapsed=0;pausePlatter();updateTonearm(0,reverseMode);
 }
 function setVolume(value){
  const v=Math.max(0,Math.min(1,Number(value)));
@@ -203,19 +204,31 @@ async function playReversed(){
     for(let k=0;k<src.length;k++)dst[k]=src[src.length-1-k];
    }
   }
-  stopReverse();
+  reverseDuration=reverseBuffer.duration;
+  if(reverseElapsed>=reverseDuration)reverseElapsed=0;
   if(!reverseGain){reverseGain=audioContext.createGain();reverseGain.connect(audioContext.destination)}
   reverseGain.gain.value=Number($("volume").value);
   reverseSource=audioContext.createBufferSource();reverseSource.buffer=reverseBuffer;reverseSource.connect(reverseGain);
-  reverseSource.onended=()=>{if(reverseSource&&reverseSource===sourceRef){reverseSource=null;stopSpinOnly();}};
   const sourceRef=reverseSource;
-  reverseSource.start();startSpin();
+  reverseStartedAt=audioContext.currentTime;
+  sourceRef.startOffset=reverseElapsed;
+  reverseSource.onended=()=>{if(reverseSource===sourceRef){reverseSource.disconnect();reverseSource=null;reverseElapsed=0;reverseFrame=0;handleReverseTrackEnd();}};
+  reverseSource.start(0,reverseElapsed);
+  startSpin();
+  const followNeedle=()=>{if(reverseSource!==sourceRef)return;reverseElapsed=Math.min(reverseDuration,sourceRef.startOffset+audioContext.currentTime-reverseStartedAt);updateTonearm(reverseElapsed/reverseDuration,true);reverseFrame=requestAnimationFrame(followNeedle)};
+  reverseFrame=requestAnimationFrame(followNeedle);
  }catch(err){$("trackName").textContent="Could not reverse this audio format • "+err.message;reverseMode=false;$("reverse").textContent="↶ REVERSE: OFF"}
 }
 function stopSpinOnly(){pausePlatter();$("arm").classList.remove("playing")}
+function handleReverseTrackEnd(){
+ if(current<0||!reverseMode)return;
+ const first=sideStart(albums[current]);
+ if(currentTrack>first)playTrack(currentTrack-1);
+ else{pausePlatter();updateTonearm(1,true);}
+}
 function playCurrent(){
  if(currentTrack<0)return;
- updateTonearm(0);
+ updateTonearm(0,reverseMode);
  if(reverseMode){playReversed();return}
  $("audio").play().then(startSpin).catch(()=>{});
 }
@@ -238,17 +251,18 @@ function playTrack(index){
   }else{$("trackName").textContent=track+" • No audio attached yet";stopAudio()}
  };
 }
-function updateTonearm(progress=0){
+function updateTonearm(progress=0,backwards=false){
  const arm=$("arm");
  if(current<0||currentTrack<0){arm.style.transform="rotate(-54deg)";return}
  const a=albums[current],start=sideStart(a),end=sideEnd(a),count=Math.max(1,end-start);
  const trackOffset=Math.max(0,Math.min(count-1,currentTrack-start));
- const position=(trackOffset+Math.max(0,Math.min(1,progress)))/count;
+ const amount=Math.max(0,Math.min(1,progress));
+ const position=(trackOffset+(backwards?1-amount:amount))/count;
  // Ease the arm movement: smaller steps near the beginning, wider spacing toward the end.
  const easedPosition=0.7*position+0.3*position*position;
  arm.style.transform="rotate("+(-54+easedPosition*24)+"deg)";
 }
-function startSpin(){const p=$("platter");p.classList.add("spinning");p.classList.remove("paused");updateTonearm($("audio").duration?$("audio").currentTime/$("audio").duration:0)}
+function startSpin(){const p=$("platter");p.classList.add("spinning");p.classList.toggle("reverse-spin",reverseMode);p.classList.remove("paused");if(reverseMode)updateTonearm(reverseDuration?reverseElapsed/reverseDuration:0,true);else updateTonearm($("audio").duration?$("audio").currentTime/$("audio").duration:0)}
 function stopAudio(){stopPlayback()}
 $("audio").ontimeupdate=()=>{if(!reverseMode&&currentTrack>=0&&$("audio").duration)updateTonearm($("audio").currentTime/$("audio").duration)};
 $("play").onclick=()=>{
@@ -256,7 +270,7 @@ $("play").onclick=()=>{
  if(currentTrack<0)playTrack(sideStart(albums[current]));
  else playCurrent();
 };
-$("pause").onclick=()=>{ $("audio").pause();stopReverse();pausePlatter();updateTonearm($("audio").duration?$("audio").currentTime/$("audio").duration:0)};
+$("pause").onclick=()=>{if(reverseMode){stopReverse(true);pausePlatter();updateTonearm(reverseDuration?reverseElapsed/reverseDuration:0,true)}else{$("audio").pause();pausePlatter();updateTonearm($("audio").duration?$("audio").currentTime/$("audio").duration:0)}};
 $("volume").oninput=e=>setVolume(e.target.value);
 $("reverse").onclick=()=>{reverseMode=!reverseMode;$("reverse").textContent=reverseMode?"↶ REVERSE: ON":"↶ REVERSE: OFF";if(currentBlob){stopPlayback();playCurrent()}};
 $("flip").onclick=()=>{
