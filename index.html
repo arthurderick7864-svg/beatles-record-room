@@ -23,9 +23,9 @@ header{text-align:center;padding:25px 12px 12px}header h1{font-weight:400;letter
 .platter.spinning{animation:spin 2s linear infinite}@keyframes spin{to{transform:rotate(360deg)}}
 .label{width:82px;height:82px;border-radius:50%;position:relative;z-index:1;background:radial-gradient(circle,#b9a66f 0 2px,#b9a66f 2.5px,#a64d3b 3px 100%);border:2px solid #d9c58f;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;color:#f5e9c9;text-align:center;font: bold 8px Arial;letter-spacing:1px;box-shadow:0 1px 5px #000,inset 0 0 0 2px #ffffff22}.label.apple{background:radial-gradient(circle,#d8c78e 0 2px,#d8c78e 2.5px,#557a43 3px 100%);color:#f4edcf;border-color:#d9d0a4}.label .label-brand{font-size:7px;letter-spacing:1.3px;border-bottom:1px solid #f5e9c966;padding-bottom:3px;width:75%;}.label .label-band{font: bold 10px Georgia;letter-spacing:0}.label .label-side{font-size:6px;letter-spacing:1px}
 .spindle{position:absolute;width:7px;height:7px;background:#ddd;border-radius:50%}
-.arm{position:absolute;width:120px;height:8px;background:linear-gradient(#eee9dc 0%,#a8a294 35%,#5e594f 75%,#d5cebd 100%);right:28px;top:40px;transform-origin:105px 4px;transform:rotate(28deg);transition:transform .8s cubic-bezier(.2,.7,.2,1);z-index:2;border-radius:5px;box-shadow:0 2px 4px #000}
+.arm{position:absolute;width:165px;height:8px;background:linear-gradient(#eee9dc 0%,#a8a294 35%,#5e594f 75%,#d5cebd 100%);right:28px;top:40px;transform-origin:145px 4px;transform:rotate(-5deg);transition:transform .8s cubic-bezier(.2,.7,.2,1);z-index:2;border-radius:5px;box-shadow:0 2px 4px #000}
 .arm:before{content:"";position:absolute;right:0;top:-9px;width:25px;height:24px;background:linear-gradient(135deg,#d6d0c1,#777165);border:2px solid #5c574f;border-radius:4px}
-.arm:after{content:"";position:absolute;left:5px;top:-3px;width:18px;height:14px;background:linear-gradient(135deg,#b9b4a7,#555148);border:1px solid #454137;border-radius:2px;transform:rotate(-8deg)}
+.arm:after{content:"";position:absolute;left:0;top:-3px;width:18px;height:14px;background:linear-gradient(135deg,#b9b4a7,#555148);border:1px solid #454137;border-radius:2px;transform:rotate(-8deg)}
 .controls{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin:13px 0}
 .volume-control{display:flex;align-items:center;justify-content:center;gap:10px;margin:10px auto 14px;font:11px Arial;letter-spacing:1px;color:#34271d}
 .volume-control input{width:min(180px,45%);accent-color:#8b4937}
@@ -239,11 +239,11 @@ function playTrack(index){
 }
 function updateTonearm(progress=0){
  const arm=$("arm");
- if(current<0||currentTrack<0){arm.style.transform="rotate(28deg)";return}
+ if(current<0||currentTrack<0){arm.style.transform="rotate(-5deg)";return}
  const a=albums[current],start=sideStart(a),end=sideEnd(a),count=Math.max(1,end-start);
  const trackOffset=Math.max(0,Math.min(count-1,currentTrack-start));
  const position=(trackOffset+Math.max(0,Math.min(1,progress)))/count;
- arm.style.transform="rotate("+(28+position*20)+"deg)";
+ arm.style.transform="rotate("+(-5-position*30)+"deg)";
 }
 function startSpin(){$("platter").classList.add("spinning");updateTonearm($("audio").duration?$("audio").currentTime/$("audio").duration:0)}
 function stopAudio(){stopPlayback()}
