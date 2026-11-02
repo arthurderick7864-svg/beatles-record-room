@@ -54,14 +54,14 @@ footer{text-align:center;color:#a99a80;font:11px Arial;padding:5px 15px 25px}
 </div>
 <div class="now"><strong id="albumName">Please select a record</strong><span id="trackName">Choose an album from the shelf</span></div>
 <div class="controls">
-<button id="play">▶ PLAY</button><button id="pause">Ⅱ PAUSE</button><button id="flip">FLIP A / B</button>
+<button id="play">▶ PLAY</button><button id="pause">Ⅱ PAUSE</button>
+<button id="flip">FLIP TO SIDE B</button>
 </div>
-<div class="tracklist" id="tracks">Your selected record's tracks will appear here.</div>
+<div class="tracklist" id="tracks">Choose an album to see its tracks.</div>
 <div class="upload-area">
-<label class="upload" for="audioFiles">＋ ADD YOUR OWN MUSIC</label>
-<input id="audioFiles" type="file" accept="audio/*" multiple>
-<p class="hint">Your imported songs are saved in this browser, even after updates.</p>
+<p class="hint">Select a track, then use its ADD AUDIO button. Audio is stored with that track, not as a new record.</p>
 </div>
+<input id="audioFiles" type="file" accept="audio/*" style="display:none">
 </div>
 </section>
 </main>
@@ -82,14 +82,73 @@ const albums=[
 {title:"Abbey Road",year:"1969",tracks:["Come Together","Something","Maxwell's Silver Hammer","Oh! Darling","Octopus's Garden","I Want You (She's So Heavy)"]},
 {title:"Let It Be",year:"1970",tracks:["Two of Us","Dig a Pony","Across the Universe","I Me Mine","Dig It","Let It Be","The Long and Winding Road"]}
 ];
-const $=id=>document.getElementById(id);let current=-1,side="A",currentTrack=-1,playing=false,custom=[],db;
-const request=indexedDB.open("BeatlesRecordRoomLibrary",1);
-request.onupgradeneeded=e=>{db=e.target.result;if(!db.objectStoreNames.contains("songs"))db.createObjectStore("songs",{keyPath:"id",autoIncrement:true})};
+const $=id=>document.getElementById(id);
+let current=-1,side="A",currentTrack=-1,custom=[],db,activeObjectUrl=null;
+const request=indexedDB.open("BeatlesRecordRoomLibrary",2);
+request.onupgradeneeded=e=>{
+ db=e.target.result;
+ if(!db.objectStoreNames.contains("songs"))db.createObjectStore("songs",{keyPath:"id",autoIncrement:true});
+ if(!db.objectStoreNames.contains("trackAudio"))db.createObjectStore("trackAudio",{keyPath:"key"});
+};
 request.onsuccess=e=>{db=e.target.result;loadCustom()};
-request.onerror=()=>{$("trackName").textContent="Browser storage unavailable; imported songs may not persist."};
-function allRecords(){return albums.concat(custom.map(s=>({title:s.name,year:"YOUR MUSIC",tracks:[s.name],custom:true,id:s.id})))}
+request.onerror=()=>{$("trackName").textContent="Browser storage unavailable; audio may not persist."};
+function allRecords(){return albums}
+function visibleTracks(){const a=allRecords()[current];if(!a)return[];return side==="A"?a.tracks.slice(0,7):a.tracks.slice(7,14)}
+function trackKey(){return current+"|"+side+"|"+currentTrack}
+function loadCustom(){renderShelf();if(current>=0)renderTracks()}
 function renderShelf(){const shelf=$("shelf");shelf.innerHTML="";allRecords().forEach((a,i)=>{const el=document.createElement("div");el.className="album"+(i===current?" active":"");const cover=document.createElement("div");cover.className="cover";cover.textContent=a.title;const small=document.createElement("small");small.textContent=a.year;el.append(cover,small);el.onclick=()=>selectAlbum(i);shelf.append(el)})}
-function selectAlbum(i){stopAudio();current=i;side="A";currentTrack=-1;const a=allRecords()[i];$("albumName").textContent=a.title;$("label").textContent=a.title.toUpperCase();$("trackName").textContent=a.year+" • SIDE A";renderTracks();renderShelf();$("platter").classList.remove("spinning");$("arm").classList.remove("playing")}
+function selectAlbum(i){stopAudio();current=i;side="A";currentTrack=-1;const a=allRecords()[i];$("albumName").textContent=a.title;$("label").textContent=a.title.toUpperCase();$("trackName").textContent=a.year+" • SIDE A";$("flip").textContent="FLIP TO SIDE B";renderTracks();renderShelf()}
+function renderTracks(){
+ const box=$("tracks");box.innerHTML="";const a=allRecords()[current];
+ if(!a){box.textContent="Select a record to see its tracks.";return}
+ const tracks=visibleTracks();
+ if(!tracks.length){box.textContent="No tracks listed on this side yet.";return}
+ tracks.forEach((t,i)=>{
+  const actualIndex=side==="A"?i:i+7;
+  const row=document.createElement("div");row.className="track"+(actualIndex===currentTrack?" selected":"");
+  const name=document.createElement("span");name.textContent=(i+1)+". "+t;
+  const attach=document.createElement("button");attach.textContent="＋ AUDIO";attach.style.float="right";attach.style.padding="5px 8px";attach.onclick=e=>{e.stopPropagation();currentTrack=actualIndex;$("audioFiles").click()};
+  const status=document.createElement("small");status.style.marginLeft="8px";status.textContent="";
+  const check=db?db.transaction("trackAudio","readonly").objectStore("trackAudio").get(current+"|"+side+"|"+actualIndex):null;
+  if(check)check.onsuccess=()=>{if(check.result)status.textContent=" • AUDIO SAVED"};
+  row.append(name,status,attach);row.onclick=()=>playTrack(actualIndex);box.append(row);
+ });
+}
+function playTrack(i){
+ const a=allRecords()[current];if(!a)return;currentTrack=i;
+ const title=a.tracks[i];$("trackName").textContent="SIDE "+side+" • "+title;renderTracks();
+ if(!db){startSpin();return}
+ const key=current+"|"+side+"|"+i;
+ const req=db.transaction("trackAudio","readonly").objectStore("trackAudio").get(key);
+ req.onsuccess=()=>{
+  if(req.result&&req.result.blob){
+   if(activeObjectUrl)URL.revokeObjectURL(activeObjectUrl);
+   activeObjectUrl=URL.createObjectURL(req.result.blob);$("audio").src=activeObjectUrl;
+   $("audio").play().then(startSpin).catch(()=>{$("trackName").textContent=title+" • Press PLAY to listen"});
+  }else{$("trackName").textContent=title+" • No audio attached yet";stopAudio();}
+ };
+}
+function startSpin(){ $("platter").classList.add("spinning");$("arm").classList.add("playing")}
+function stopAudio(){ $("audio").pause();$("platter").classList.remove("spinning");$("arm").classList.remove("playing")}
+$("play").onclick=()=>{if(current<0){selectAlbum(0);return}if(currentTrack<0){const first=side==="A"?0:7;playTrack(first)}else{$("audio").play().then(startSpin).catch(()=>{})}};
+$("pause").onclick=()=>{ $("audio").pause();$("platter").classList.remove("spinning");$("arm").classList.remove("playing")};
+$("flip").onclick=()=>{
+ stopAudio();side=side==="A"?"B":"A";currentTrack=-1;
+ $("flip").textContent=side==="A"?"FLIP TO SIDE B":"FLIP TO SIDE A";
+ $("trackName").textContent=allRecords()[current].title+" • SIDE "+side;
+ renderTracks();
+};
+$("audio").onended=()=>{const tracks=visibleTracks();const next=currentTrack+1;if(next<(side==="A"?7:14)&&next<(allRecords()[current]?.tracks.length||0))playTrack(next);else stopAudio()};
+$("audioFiles").onchange=e=>{
+ const file=e.target.files[0];e.target.value="";
+ if(!file||!db||current<0||currentTrack<0)return;
+ const key=current+"|"+side+"|"+currentTrack;
+ const tx=db.transaction("trackAudio","readwrite");
+ tx.objectStore("trackAudio").put({key,blob:file,fileName:file.name});
+ tx.oncomplete=()=>{$("trackName").textContent="Audio attached to: "+allRecords()[current].tracks[currentTrack];renderTracks()};
+ tx.onerror=()=>alert("Could not save that audio file. Your browser may be out of storage.");
+};
+renderShelf();$("platter").classList.remove("spinning");$("arm").classList.remove("playing")}
 function renderTracks(){const a=allRecords()[current];const box=$("tracks");box.innerHTML="";if(!a){box.textContent="Select a record to see its tracks.";return}a.tracks.forEach((t,i)=>{const d=document.createElement("div");d.className="track"+(i===currentTrack?" selected":"");d.textContent=(i+1)+". "+t;d.onclick=()=>playTrack(i);box.append(d)})}
 function playTrack(i){const a=allRecords()[current];if(!a)return;currentTrack=i;const t=a.tracks[i];$("trackName").textContent="SIDE "+side+" • "+t;renderTracks();if(a.custom){const song=custom.find(s=>s.id===a.id);if(song){const url=URL.createObjectURL(song.blob);$("audio").src=url;$("audio").play().then(startSpin).catch(()=>{$("trackName").textContent="Press PLAY to start: "+t})}}else{$("trackName").textContent=t+" • Add your own audio to hear it here";startSpin()}}
 function startSpin(){playing=true;$("platter").classList.add("spinning");$("arm").classList.add("playing")}
