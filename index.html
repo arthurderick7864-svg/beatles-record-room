@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>The Beatles Record Room</title>
+<style>
+:root{--paper:#e9dfc9;--ink:#25231f;--red:#9b4937;--gold:#c5a66b;--wood:#60432f}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at top,#574638,#191714 75%);color:var(--paper);font-family:Georgia,serif;min-height:100vh}
+header{text-align:center;padding:25px 12px 12px}header h1{font-weight:400;letter-spacing:5px;font-size:clamp(24px,4vw,42px);margin:0}header p{color:#c9bda7;letter-spacing:2px;font:11px Arial;margin:9px 0}
+.room{max-width:1100px;margin:0 auto;padding:18px;display:grid;grid-template-columns:minmax(0,1.15fr) minmax(280px,.85fr);gap:20px}
+.panel{background:linear-gradient(145deg,#806044,#4a3022);border:9px solid #2a211a;box-shadow:0 12px 30px #0009;padding:18px;border-radius:5px}
+.shelf{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;align-content:start}
+.album{background:#211d19;padding:8px 8px 12px;text-align:center;cursor:pointer;border:1px solid #b69a6d;transition:.18s;min-width:0}
+.album:hover,.album.active{transform:translateY(-4px);border-color:#f1d59b;box-shadow:0 5px 15px #0008}
+.cover{aspect-ratio:1;background:linear-gradient(135deg,#c9b995,#796b53);color:#29251f;display:flex;align-items:center;justify-content:center;text-align:center;padding:8px;font-size:clamp(12px,2vw,19px);letter-spacing:1px;position:relative;overflow:hidden}
+.cover:after{content:"";position:absolute;inset:8px;border:1px solid #332b22;opacity:.45}
+.album small{display:block;margin-top:8px;color:#e8d9bc;font:11px Arial;letter-spacing:1px}
+.deck{background:linear-gradient(145deg,#d3c6a9,#8f8065);color:#211e19;border:8px solid #34271d;border-radius:5px;padding:15px;box-shadow:inset 0 0 0 2px #f2e7cd}
+.deck h2{font-weight:400;text-align:center;letter-spacing:3px;font-size:17px;margin:0 0 12px}
+.turntable{height:290px;background:linear-gradient(145deg,#282725,#0e0e0d);border:5px solid #6d5b42;border-radius:4px;position:relative;display:grid;place-items:center;overflow:hidden}
+.platter{width:240px;height:240px;border-radius:50%;background:repeating-radial-gradient(circle,#171717 0 2px,#292929 3px 4px,#111 5px 6px);border:5px solid #555;display:grid;place-items:center;box-shadow:0 0 15px #000}
+.platter.spinning{animation:spin 2s linear infinite}@keyframes spin{to{transform:rotate(360deg)}}
+.label{width:76px;height:76px;border-radius:50%;background:#a64d3b;border:3px solid #d4b77c;display:grid;place-items:center;color:#f1dfbd;text-align:center;font:10px Arial;letter-spacing:1px}
+.spindle{position:absolute;width:7px;height:7px;background:#ddd;border-radius:50%}
+.arm{position:absolute;width:120px;height:8px;background:linear-gradient(#d8d1c0,#756f63);right:28px;top:40px;transform-origin:105px 4px;transform:rotate(28deg);transition:transform 1s;z-index:2;border-radius:5px;box-shadow:0 2px 4px #000}
+.arm:before{content:"";position:absolute;right:0;top:-9px;width:25px;height:24px;background:#b9b2a3;border:2px solid #5c574f;border-radius:4px}
+.arm.playing{transform:rotate(48deg)}
+.controls{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin:13px 0}
+button,.upload{border:1px solid #4c3c2a;background:#3b3025;color:#f1e4c8;padding:10px 14px;cursor:pointer;font:12px Arial;letter-spacing:1px}
+button:hover,.upload:hover{background:#684b35}button:disabled{opacity:.4;cursor:not-allowed}
+.now{text-align:center;font:13px Arial;margin:8px 0}.now strong{display:block;font:20px Georgia;margin-bottom:5px}
+.tracklist{background:#e4d8be;padding:10px;color:#29241d;max-height:160px;overflow:auto;font:13px Arial}
+.track{padding:7px;border-bottom:1px solid #c6b99f;cursor:pointer}.track:hover,.track.selected{background:#c8b58f}
+.upload-area{margin-top:14px;text-align:center;font:12px Arial}.upload-area input{display:none}.hint{font:11px Arial;color:#514534;text-align:center;margin:10px 0 0}
+.library-title{grid-column:1/-1;text-align:center;letter-spacing:3px;font-size:13px;color:#e1c99d;margin:4px}
+footer{text-align:center;color:#a99a80;font:11px Arial;padding:5px 15px 25px}
+@media(max-width:760px){.room{grid-template-columns:1fr}.shelf{grid-template-columns:repeat(3,1fr)}.turntable{height:260px}.platter{width:210px;height:210px}}
+</style>
+</head>
+<body>
+<header><h1>THE BEATLES RECORD ROOM</h1><p>A LITTLE PLACE FOR THE MUSIC TO LIVE</p></header>
+<main class="room">
+<section class="panel">
+<div class="library-title">THE RECORD SHELF</div>
+<div class="shelf" id="shelf"></div>
+</section>
+<section class="panel">
+<div class="deck">
+<h2>STEREO HI-FI • 1966</h2>
+<div class="turntable">
+<div class="platter" id="platter"><div class="label" id="label">THE<br>BEATLES</div><div class="spindle"></div></div>
+<div class="arm" id="arm"></div>
+</div>
+<div class="now"><strong id="albumName">Please select a record</strong><span id="trackName">Choose an album from the shelf</span></div>
+<div class="controls">
+<button id="play">▶ PLAY</button><button id="pause">Ⅱ PAUSE</button><button id="flip">FLIP A / B</button>
+</div>
+<div class="tracklist" id="tracks">Your selected record's tracks will appear here.</div>
+<div class="upload-area">
+<label class="upload" for="audioFiles">＋ ADD YOUR OWN MUSIC</label>
+<input id="audioFiles" type="file" accept="audio/*" multiple>
+<p class="hint">Your imported songs are saved in this browser, even after updates.</p>
+</div>
+</div>
+</section>
+</main>
+<footer>Made for listening • Your uploaded music stays in this browser on this device</footer>
+<audio id="audio"></audio>
+<script>
+const albums=[
+{title:"Please Please Me",year:"1963",tracks:["I Saw Her Standing There","Misery","Anna (Go to Him)","Chains","Boys","Ask Me Why","Please Please Me","Love Me Do"]},
+{title:"With The Beatles",year:"1963",tracks:["It Won't Be Long","All I've Got to Do","All My Loving","Don't Bother Me","Little Child","Till There Was You","Please Mister Postman"]},
+{title:"A Hard Day's Night",year:"1964",tracks:["A Hard Day's Night","I Should Have Known Better","If I Fell","I'm Happy Just to Dance with You","And I Love Her","Tell Me Why"]},
+{title:"Beatles for Sale",year:"1964",tracks:["No Reply","I'm a Loser","Baby's in Black","Rock and Roll Music","I'll Follow the Sun","Eight Days a Week"]},
+{title:"Help!",year:"1965",tracks:["Help!","The Night Before","You've Got to Hide Your Love Away","I Need You","Another Girl","You're Going to Lose That Girl"]},
+{title:"Rubber Soul",year:"1965",tracks:["Drive My Car","Norwegian Wood","You Won't See Me","Nowhere Man","Think for Yourself","The Word","Michelle"]},
+{title:"Revolver",year:"1966",tracks:["Taxman","Eleanor Rigby","I'm Only Sleeping","Love You To","Here, There and Everywhere","Yellow Submarine","She Said She Said"]},
+{title:"Sgt. Pepper's",year:"1967",tracks:["Sgt. Pepper's Lonely Hearts Club Band","With a Little Help from My Friends","Lucy in the Sky with Diamonds","Getting Better","Fixing a Hole","She's Leaving Home"]},
+{title:"Magical Mystery Tour",year:"1967",tracks:["Magical Mystery Tour","The Fool on the Hill","Flying","Blue Jay Way","Your Mother Should Know","I Am the Walrus"]},
+{title:"The Beatles",year:"1968",tracks:["Back in the U.S.S.R.","Dear Prudence","Glass Onion","Ob-La-Di, Ob-La-Da","Wild Honey Pie","The Continuing Story of Bungalow Bill"]},
+{title:"Abbey Road",year:"1969",tracks:["Come Together","Something","Maxwell's Silver Hammer","Oh! Darling","Octopus's Garden","I Want You (She's So Heavy)"]},
+{title:"Let It Be",year:"1970",tracks:["Two of Us","Dig a Pony","Across the Universe","I Me Mine","Dig It","Let It Be","The Long and Winding Road"]}
+];
+const $=id=>document.getElementById(id);let current=-1,side="A",currentTrack=-1,playing=false,custom=[],db;
+const request=indexedDB.open("BeatlesRecordRoomLibrary",1);
+request.onupgradeneeded=e=>{db=e.target.result;if(!db.objectStoreNames.contains("songs"))db.createObjectStore("songs",{keyPath:"id",autoIncrement:true})};
+request.onsuccess=e=>{db=e.target.result;loadCustom()};
+request.onerror=()=>{$("trackName").textContent="Browser storage unavailable; imported songs may not persist."};
+function allRecords(){return albums.concat(custom.map(s=>({title:s.name,year:"YOUR MUSIC",tracks:[s.name],custom:true,id:s.id})))}
+function renderShelf(){const shelf=$("shelf");shelf.innerHTML="";allRecords().forEach((a,i)=>{const el=document.createElement("div");el.className="album"+(i===current?" active":"");const cover=document.createElement("div");cover.className="cover";cover.textContent=a.title;const small=document.createElement("small");small.textContent=a.year;el.append(cover,small);el.onclick=()=>selectAlbum(i);shelf.append(el)})}
+function selectAlbum(i){stopAudio();current=i;side="A";currentTrack=-1;const a=allRecords()[i];$("albumName").textContent=a.title;$("label").textContent=a.title.toUpperCase();$("trackName").textContent=a.year+" • SIDE A";renderTracks();renderShelf();$("platter").classList.remove("spinning");$("arm").classList.remove("playing")}
+function renderTracks(){const a=allRecords()[current];const box=$("tracks");box.innerHTML="";if(!a){box.textContent="Select a record to see its tracks.";return}a.tracks.forEach((t,i)=>{const d=document.createElement("div");d.className="track"+(i===currentTrack?" selected":"");d.textContent=(i+1)+". "+t;d.onclick=()=>playTrack(i);box.append(d)})}
+function playTrack(i){const a=allRecords()[current];if(!a)return;currentTrack=i;const t=a.tracks[i];$("trackName").textContent="SIDE "+side+" • "+t;renderTracks();if(a.custom){const song=custom.find(s=>s.id===a.id);if(song){const url=URL.createObjectURL(song.blob);$("audio").src=url;$("audio").play().then(startSpin).catch(()=>{$("trackName").textContent="Press PLAY to start: "+t})}}else{$("trackName").textContent=t+" • Add your own audio to hear it here";startSpin()}}
+function startSpin(){playing=true;$("platter").classList.add("spinning");$("arm").classList.add("playing")}
+function stopAudio(){playing=false;$("audio").pause();$("platter").classList.remove("spinning");$("arm").classList.remove("playing")}
+$("play").onclick=()=>{if(current<0){selectAlbum(0);return}const a=allRecords()[current];if(a.custom&&currentTrack<0)playTrack(0);else if(a.custom){$("audio").play().then(startSpin).catch(()=>{});}else{if(currentTrack<0)currentTrack=0;playTrack(currentTrack)}};
+$("pause").onclick=()=>{ $("audio").pause();playing=false;$("platter").classList.remove("spinning");$("arm").classList.remove("playing")};
+$("flip").onclick=()=>{side=side==="A"?"B":"A";$("trackName").textContent="SIDE "+side+" • "+(current>=0?allRecords()[current].title:"No record selected");};
+$("audio").onended=()=>{const a=allRecords()[current];if(a&&a.custom)stopAudio();else if(a&&currentTrack<a.tracks.length-1)playTrack(currentTrack+1);else stopAudio()};
+function loadCustom(){const tx=db.transaction("songs","readonly");tx.objectStore("songs").getAll().onsuccess=e=>{custom=e.target.result||[];renderShelf()}}
+$("audioFiles").onchange=e=>{if(!db){alert("Storage is not ready yet. Try again in a moment.");return}const files=[...e.target.files].filter(f=>f.type.startsWith("audio/"));if(!files.length)return;const tx=db.transaction("songs","readwrite");files.forEach(file=>tx.objectStore("songs").add({name:file.name.replace(/\.[^.]+$/,""),blob:file}));tx.oncomplete=()=>{loadCustom();$("trackName").textContent=files.length+" song(s) added and saved in this browser.";e.target.value=""};tx.onerror=()=>alert("Could not save those files. Your browser may be out of storage.")};
+renderShelf();
+</script>
+</body></html>
