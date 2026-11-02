@@ -27,6 +27,9 @@ header{text-align:center;padding:25px 12px 12px}header h1{font-weight:400;letter
 .arm:before{content:"";position:absolute;right:0;top:-9px;width:25px;height:24px;background:#b9b2a3;border:2px solid #5c574f;border-radius:4px}
 .arm.playing{transform:rotate(48deg)}
 .controls{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin:13px 0}
+.volume-control{display:flex;align-items:center;justify-content:center;gap:10px;margin:10px auto 14px;font:11px Arial;letter-spacing:1px;color:#34271d}
+.volume-control input{width:min(180px,45%);accent-color:#8b4937}
+.volume-control span{min-width:34px;text-align:right;font-variant-numeric:tabular-nums}
 button,.upload{border:1px solid #4c3c2a;background:#3b3025;color:#f1e4c8;padding:10px 14px;cursor:pointer;font:12px Arial;letter-spacing:1px}
 button:hover,.upload:hover{background:#684b35}button:disabled{opacity:.4;cursor:not-allowed}
 .now{text-align:center;font:13px Arial;margin:8px 0}.now strong{display:block;font:20px Georgia;margin-bottom:5px}
@@ -56,6 +59,12 @@ footer{text-align:center;color:#a99a80;font:11px Arial;padding:5px 15px 25px}
 <div class="controls">
 <button id="play">▶ PLAY</button><button id="pause">Ⅱ PAUSE</button>
 <button id="flip">FLIP TO SIDE B</button>
+<button id="reverse">↶ REVERSE: OFF</button>
+</div>
+<div class="volume-control">
+<label for="volume">VOLUME</label>
+<input id="volume" type="range" min="0" max="1" step="0.01" value="0.8">
+<span id="volumeValue">80%</span>
 </div>
 <div class="tracklist" id="tracks">Choose an album to see its tracks.</div>
 <div class="upload-area">
@@ -83,7 +92,7 @@ const albums=[
 {title:"Let It Be",year:"1970",sideAEnd:6,tracks:["Two of Us","Dig a Pony","Across the Universe","I Me Mine","Dig It","Let It Be","Maggie Mae","I've Got a Feeling","One After 909","The Long and Winding Road","For You Blue","Get Back"]}
 ];
 const $=id=>document.getElementById(id);
-let current=-1,side="A",currentTrack=-1,db=null,activeObjectUrl=null;
+let current=-1,side="A",currentTrack=-1,db=null,activeObjectUrl=null,currentBlob=null,reverseMode=false,audioContext=null,reverseSource=null,reverseGain=null,reverseBuffer=null;
 const DB_NAME="BeatlesRecordRoomLibrary";
 const request=indexedDB.open(DB_NAME,2);
 request.onupgradeneeded=e=>{
@@ -144,9 +153,54 @@ function renderTracks(){
   }
  });
 }
+function stopReverse(){
+ if(reverseSource){try{reverseSource.stop()}catch(e){}reverseSource.disconnect();reverseSource=null}
+}
+function stopPlayback(){
+ $("audio").pause();stopReverse();
+ $("platter").classList.remove("spinning");$("arm").classList.remove("playing");
+}
+function setVolume(value){
+ const v=Math.max(0,Math.min(1,Number(value)));
+ $("audio").volume=v;
+ if(reverseGain)reverseGain.gain.value=v;
+ $("volumeValue").textContent=Math.round(v*100)+"%";
+}
+async function playReversed(){
+ if(!currentBlob)return;
+ try{
+  const AudioCtx=window.AudioContext||window.webkitAudioContext;
+  if(!AudioCtx)throw new Error("Reverse playback is not supported by this browser.");
+  if(!audioContext)audioContext=new AudioCtx();
+  await audioContext.resume();
+  if(!reverseBuffer){
+   const bytes=await currentBlob.arrayBuffer();
+   const decoded=await audioContext.decodeAudioData(bytes);
+   reverseBuffer=audioContext.createBuffer(decoded.numberOfChannels,decoded.length,decoded.sampleRate);
+   for(let ch=0;ch<decoded.numberOfChannels;ch++){
+    const src=decoded.getChannelData(ch),dst=reverseBuffer.getChannelData(ch);
+    for(let k=0;k<src.length;k++)dst[k]=src[src.length-1-k];
+   }
+  }
+  stopReverse();
+  if(!reverseGain){reverseGain=audioContext.createGain();reverseGain.connect(audioContext.destination)}
+  reverseGain.gain.value=Number($("volume").value);
+  reverseSource=audioContext.createBufferSource();reverseSource.buffer=reverseBuffer;reverseSource.connect(reverseGain);
+  reverseSource.onended=()=>{if(reverseSource&&reverseSource===sourceRef){reverseSource=null;stopSpinOnly();}};
+  const sourceRef=reverseSource;
+  reverseSource.start();startSpin();
+ }catch(err){$("trackName").textContent="Could not reverse this audio format • "+err.message;reverseMode=false;$("reverse").textContent="↶ REVERSE: OFF"}
+}
+function stopSpinOnly(){$("platter").classList.remove("spinning");$("arm").classList.remove("playing")}
+function playCurrent(){
+ if(currentTrack<0)return;
+ if(reverseMode){playReversed();return}
+ $("audio").play().then(startSpin).catch(()=>{});
+}
 function playTrack(index){
  if(current<0||index<0||index>=albums[current].tracks.length)return;
- currentTrack=index;const a=albums[current],track=a.tracks[index];
+ stopPlayback();currentTrack=index;currentBlob=null;reverseBuffer=null;
+ const a=albums[current],track=a.tracks[index];
  side=index<a.sideAEnd?"A":"B";
  $("flip").textContent=side==="A"?"FLIP TO SIDE B":"FLIP TO SIDE A";
  $("trackName").textContent="SIDE "+side+" • "+track;renderTracks();
@@ -155,9 +209,10 @@ function playTrack(index){
  req.onsuccess=()=>{
   if(currentTrack!==index)return;
   if(req.result&&req.result.blob){
+   currentBlob=req.result.blob;
    if(activeObjectUrl)URL.revokeObjectURL(activeObjectUrl);
-   activeObjectUrl=URL.createObjectURL(req.result.blob);$("audio").src=activeObjectUrl;
-   $("audio").play().then(startSpin).catch(()=>{$("trackName").textContent=track+" • Press PLAY to listen"});
+   activeObjectUrl=URL.createObjectURL(currentBlob);$("audio").src=activeObjectUrl;
+   playCurrent();
   }else{$("trackName").textContent=track+" • No audio attached yet";stopAudio()}
  };
 }
@@ -166,9 +221,9 @@ function stopAudio(){$("audio").pause();$("platter").classList.remove("spinning"
 $("play").onclick=()=>{
  if(current<0){selectAlbum(0);return}
  if(currentTrack<0)playTrack(sideStart(albums[current]));
- else $("audio").play().then(startSpin).catch(()=>{});
+ else playCurrent();
 };
-$("pause").onclick=()=>{ $("audio").pause();$("platter").classList.remove("spinning");$("arm").classList.remove("playing")};
+$("pause").onclick=()=>{ $("audio").pause();stopReverse();$("platter").classList.remove("spinning");$("arm").classList.remove("playing")};\n$("volume").oninput=e=>setVolume(e.target.value);\n$("reverse").onclick=()=>{reverseMode=!reverseMode;$("reverse").textContent=reverseMode?"↶ REVERSE: ON":"↶ REVERSE: OFF";if(currentBlob){stopPlayback();playCurrent()}};
 $("flip").onclick=()=>{
  if(current<0){selectAlbum(0);return}
  stopAudio();side=side==="A"?"B":"A";currentTrack=-1;
