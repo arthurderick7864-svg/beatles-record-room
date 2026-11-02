@@ -239,11 +239,11 @@ function playTrack(index){
 }
 function updateTonearm(progress=0){
  const arm=$("arm");
- if(current<0||currentTrack<0){arm.style.transform="rotate(-5deg)";return}
+ if(current<0||currentTrack<0){arm.style.transform="rotate(-30deg)";return}
  const a=albums[current],start=sideStart(a),end=sideEnd(a),count=Math.max(1,end-start);
  const trackOffset=Math.max(0,Math.min(count-1,currentTrack-start));
  const position=(trackOffset+Math.max(0,Math.min(1,progress)))/count;
- arm.style.transform="rotate("+(-5-position*30)+"deg)";
+ arm.style.transform="rotate("+(-30+position*25)+"deg)";
 }
 function startSpin(){$("platter").classList.add("spinning");updateTonearm($("audio").duration?$("audio").currentTime/$("audio").duration:0)}
 function stopAudio(){stopPlayback()}
