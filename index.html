@@ -245,7 +245,7 @@ function updateTonearm(progress=0){
  const position=(trackOffset+Math.max(0,Math.min(1,progress)))/count;
  // Ease the arm movement: smaller steps near the beginning, wider spacing toward the end.
  const easedPosition=0.45*position+0.55*position*position;
- arm.style.transform="rotate("+(-54+easedPosition*18)+"deg)";
+ arm.style.transform="rotate("+(-54+easedPosition*24)+"deg)";
 }
 function startSpin(){$("platter").classList.add("spinning");updateTonearm($("audio").duration?$("audio").currentTime/$("audio").duration:0)}
 function stopAudio(){stopPlayback()}
@@ -268,7 +268,7 @@ $("audio").onended=()=>{
  if(reverseMode)return;
  if(current<0)return;
  const a=albums[current],next=currentTrack+1;
- if(next<sideEnd(a))playTrack(next);else{ $("platter").classList.remove("spinning"); stopReverse(); $("audio").pause(); updateTonearm(1); $("arm").style.transform="rotate(-3deg)"; }
+ if(next<sideEnd(a))playTrack(next);else{ $("platter").classList.remove("spinning"); stopReverse(); $("audio").pause(); updateTonearm(1); }
 };
 $("audioFiles").onchange=e=>{
  const file=e.target.files[0],index=Number(e.target.dataset.trackIndex);e.target.value="";
